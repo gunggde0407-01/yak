@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Tamu - Platform Kesehatan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIABLES & RESET ===== */
+        :root {
+            --primary: #3498DB;
+            --primary-dark: #2980B9;
+            --secondary: #27AE60;
+            --secondary-dark: #219653;
+            --accent: #E67E22;
+            --light-bg: #E8F4F8;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --gray: #6C757D;
+            --dark: #2C3E50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --error: #E74C3C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light-bg);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ===== PROFESSIONAL LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--light-bg) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+            width: 500px;
+            height: 500px;
+            padding: 50px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .loading-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 15s linear infinite;
+            z-index: -1;
+        }
+
+        .loading-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: gentleBounce 2.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .loading-logo-icon {
+            background: linear-gradient(135deg, var(--white) 0%, #f0f8ff 100%);
+            color: var(--primary);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .loading-logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.5), transparent);
+            transform: rotate(0deg);
+            animation: shine 3s infinite linear;
+        }
+
+        .loading-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2.8rem;
+            color: white;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .loading-progress {
+            margin: 20px 0;
+            flex-shrink: 0;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--white) 0%, #e3f2fd 100%);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .loading-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        .loading-percentage {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-family: 'Poppins', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .loading-message {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 15px;
+            font-style: italic;
+            animation: fadeIn 1.5s ease;
+            min-height: 24px;
+            flex-shrink: 0;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .loading-dots span {
+            animation: blink 1.4s infinite both;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .loading-features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            opacity: 0.8;
+            flex-shrink: 0;
+        }
+
+        .loading-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            padding: 10px;
+        }
+
+        .loading-feature i {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .loading-feature span {
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* ===== MODERN GUEST BOOK SCREEN ===== */
+        .guestbook-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #c9d6ff;
+            background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+            padding: 20px;
+        }
+
+        .guestbook-container {
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .guestbook-container p {
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0.3px;
+            margin: 20px 0;
+        }
+
+        .guestbook-container span {
+            font-size: 12px;
+        }
+
+        .guestbook-container a {
+            color: #333;
+            font-size: 13px;
+            text-decoration: none;
+            margin: 15px 0 10px;
+        }
+
+        .guestbook-container button {
+            background-color: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            padding: 10px 45px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guestbook-container button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .guestbook-container button.hidden {
+            background-color: transparent;
+            border-color: #fff;
+        }
+
+        .guestbook-container form {
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            height: 100%;
+        }
+
+        .guestbook-container input,
+        .guestbook-container select {
+            background-color: #eee;
+            border: none;
+            margin: 8px 0;
+            padding: 10px 15px;
+            font-size: 13px;
+            border-radius: 8px;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .guestbook-container input:focus,
+        .guestbook-container select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .guestbook-container input.error,
+        .guestbook-container select.error {
+            border: 1px solid var(--error);
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            align-self: flex-start;
+            display: none;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .guest-info {
+            left: 0;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .guestbook-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .guestbook-logo-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .guestbook-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .success-message i {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes gentleBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% {
+                opacity: 0;
+            }
+            40% {
+                opacity: 1;
+            }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) {
+            .loading-content {
+                width: 90%;
+                max-width: 400px;
+                height: auto;
+                min-height: 450px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .loading-content {
+                width: 90%;
+                max-width: 380px;
+                height: auto;
+                min-height: 420px;
+                padding: 40px 25px;
+            }
+            
+            .loading-logo-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+            
+            .loading-logo-text {
+                font-size: 2.2rem;
+            }
+            
+            .guestbook-logo {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .guestbook-logo-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .loading-features {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loading-logo {
+                flex-direction: column;
+            }
+            
+            .loading-logo-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .loading-logo-text {
+                font-size: 2rem;
+            }
+            
+            .guestbook-logo-text {
+                font-size: 1.8rem;
+            }
+
+            .loading-content {
+                width: 90%;
+                max-width: 350px;
+                height: auto;
+                min-height: 400px;
+                padding: 30px 20px;
+            }
+            
+            .guestbook-container {
+                min-height: 520px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="loading-logo-icon">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <div class="loading-logo-text">Asistenku</div>
+            </div>
+            <div class="loading-progress">
+                <div class="loading-bar">
+                    <div class="loading-progress-bar"></div>
+                </div>
+                <div class="loading-percentage">0%</div>
+            </div>
+            <div class="loading-message">Mempersiapkan platform kesehatan Anda<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></div>
+            
+            <div class="loading-features">
+                <div class="loading-feature">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Edukasi</span>
+                </div>
+                <div class="loading-feature">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Assistant</span>
+                </div>
+                <div class="loading-feature">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Layanan</span>
+                </div>
+                <div class="loading-feature">
+                    <i class="fas fa-calculator"></i>
+                    <span>Kalkulator</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Guest Book Screen -->
+    <div id="guestbookScreen" class="guestbook-screen">
+        <div class="guestbook-container">
+            <div class="form-container guest-info">
+                <form id="guestbookForm">
+                    <div class="guestbook-logo">
+                        <div class="guestbook-logo-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <div class="guestbook-logo-text">Asistenku</div>
+                    </div>
+                    <h1>Buku Tamu</h1>
+                    <p>Silakan isi data diri Anda untuk mengakses platform kesehatan kami</p>
+                    
+                    <input type="text" placeholder="Nama Lengkap" id="guestName" name="entry.1857143359" required>
+                    <div class="error-message" id="nameError">Nama harus diisi</div>
+                    
+                    <select id="guestProvince" name="entry.1449502940" required>
+                        <option value="">Pilih Provinsi</option>
+                        <option value="Aceh">Aceh</option>
+                        <option value="Sumatera Utara">Sumatera Utara</option>
+                        <option value="Sumatera Barat">Sumatera Barat</option>
+                        <option value="Riau">Riau</option>
+                        <option value="Jambi">Jambi</option>
+                        <option value="Sumatera Selatan">Sumatera Selatan</option>
+                        <option value="Bengkulu">Bengkulu</option>
+                        <option value="Lampung">Lampung</option>
+                        <option value="Kepulauan Bangka Belitung">Kepulauan Bangka Belitung</option>
+                        <option value="Kepulauan Riau">Kepulauan Riau</option>
+                        <option value="DKI Jakarta">DKI Jakarta</option>
+                        <option value="Jawa Barat">Jawa Barat</option>
+                        <option value="Jawa Tengah">Jawa Tengah</option>
+                        <option value="DI Yogyakarta">DI Yogyakarta</option>
+                        <option value="Jawa Timur">Jawa Timur</option>
+                        <option value="Banten">Banten</option>
+                        <option value="Bali">Bali</option>
+                        <option value="Nusa Tenggara Barat">Nusa Tenggara Barat</option>
+                        <option value="Nusa Tenggara Timur">Nusa Tenggara Timur</option>
+                        <option value="Kalimantan Barat">Kalimantan Barat</option>
+                        <option value="Kalimantan Tengah">Kalimantan Tengah</option>
+                        <option value="Kalimantan Selatan">Kalimantan Selatan</option>
+                        <option value="Kalimantan Timur">Kalimantan Timur</option>
+                        <option value="Kalimantan Utara">Kalimantan Utara</option>
+                        <option value="Sulawesi Utara">Sulawesi Utara</option>
+                        <option value="Sulawesi Tengah">Sulawesi Tengah</option>
+                        <option value="Sulawesi Selatan">Sulawesi Selatan</option>
+                        <option value="Sulawesi Tenggara">Sulawesi Tenggara</option>
+                        <option value="Gorontalo">Gorontalo</option>
+                        <option value="Sulawesi Barat">Sulawesi Barat</option>
+                        <option value="Maluku">Maluku</option>
+                        <option value="Maluku Utara">Maluku Utara</option>
+                        <option value="Papua Barat">Papua Barat</option>
+                        <option value="Papua">Papua</option>
+                        <option value="Papua Tengah">Papua Tengah</option>
+                        <option value="Papua Pegunungan">Papua Pegunungan</option>
+                        <option value="Papua Selatan">Papua Selatan</option>
+                    </select>
+                    <div class="error-message" id="provinceError">Provinsi harus dipilih</div>
+                    
+                    <input type="tel" placeholder="Nomor Telepon" id="guestPhone" name="entry.356299444" required>
+                    <div class="error-message" id="phoneError">Nomor telepon harus diisi dan hanya boleh berisi angka (minimal 10 digit)</div>
+                    
+                    <button type="submit" id="submitBtn">
+                        <i class="fas fa-sign-in-alt"></i> Masuk ke Platform
+                    </button>
+                </form>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                <h2>Data Berhasil Dikirim!</h2>
+                <p>Mengarahkan ke platform kesehatan...</p>
+                <div class="loading-bar" style="margin: 20px 0;">
+                    <div class="loading-progress-bar" id="redirectProgress"></div>
+                </div>
+                <p style="font-size: 12px; margin-top: 15px;">Mengarahkan dalam <span id="countdown">5</span> detik</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Form URL
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeBjaTApXZnYuIpYV_zw0Yq1w7IE8U2rZSW5cxwKMNvdMdBcA/formResponse';
+
+        // FILE TUJUAN - GANTI DENGAN FILE YANG DIINGINKAN
+        const REDIRECT_URL = 'halamanutama.html'; // Ganti dengan file tujuan
+
+        // Fungsi untuk loading screen yang lebih profesional
+        function initLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.querySelector('.loading-progress-bar');
+            const percentage = document.querySelector('.loading-percentage');
+            const loadingMessage = document.querySelector('.loading-message');
+            const messages = [
+                "Mempersiapkan platform kesehatan Anda",
+                "Memuat modul edukasi kesehatan",
+                "Menyiapkan i-Doc AI Assistant",
+                "Memuat database fasilitas kesehatan",
+                "Hampir selesai"
+            ];
+            
+            let progress = 0;
+            let currentMessageIndex = 0;
+            
+            const interval = setInterval(() => {
+                // Progress dengan percepatan yang lebih halus
+                progress += Math.random() * 12;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                percentage.textContent = Math.floor(progress) + '%';
+                
+                // Update pesan berdasarkan progress
+                if (progress < 20 && currentMessageIndex !== 0) {
+                    currentMessageIndex = 0;
+                    updateMessage(messages[0]);
+                } else if (progress >= 20 && progress < 40 && currentMessageIndex !== 1) {
+                    currentMessageIndex = 1;
+                    updateMessage(messages[1]);
+                } else if (progress >= 40 && progress < 60 && currentMessageIndex !== 2) {
+                    currentMessageIndex = 2;
+                    updateMessage(messages[2]);
+                } else if (progress >= 60 && progress < 80 && currentMessageIndex !== 3) {
+                    currentMessageIndex = 3;
+                    updateMessage(messages[3]);
+                } else if (progress >= 80 && currentMessageIndex !== 4) {
+                    currentMessageIndex = 4;
+                    updateMessage(messages[4]);
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('fade-out');
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            showGuestbookScreen();
+                        }, 500);
+                    }, 800);
+                }
+            }, 180);
+            
+            function updateMessage(message) {
+                loadingMessage.style.opacity = 0;
+                setTimeout(() => {
+                    loadingMessage.innerHTML = message + '<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+                    loadingMessage.style.opacity = 1;
+                }, 300);
+            }
+        }
+
+        // Fungsi untuk menampilkan guestbook screen
+        function showGuestbookScreen() {
+            const guestbookScreen = document.getElementById('guestbookScreen');
+            guestbookScreen.style.display = 'flex';
+        }
+
+        // Fungsi untuk validasi form
+        function validateForm() {
+            const name = document.getElementById('guestName').value.trim();
+            const province = document.getElementById('guestProvince').value;
+            const phone = document.getElementById('guestPhone').value.trim();
+            
+            let isValid = true;
+            
+            // Validasi nama
+            if (!name) {
+                document.getElementById('nameError').style.display = 'block';
+                document.getElementById('guestName').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+                document.getElementById('guestName').classList.remove('error');
+            }
+            
+            // Validasi provinsi
+            if (!province) {
+                document.getElementById('provinceError').style.display = 'block';
+                document.getElementById('guestProvince').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('provinceError').style.display = 'none';
+                document.getElementById('guestProvince').classList.remove('error');
+            }
+            
+            // Validasi nomor telepon
+            const phoneRegex = /^[0-9]+$/;
+            if (!phone || !phoneRegex.test(phone) || phone.length < 10) {
+                document.getElementById('phoneError').style.display = 'block';
+                document.getElementById('guestPhone').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+                document.getElementById('guestPhone').classList.remove('error');
+            }
+            
+            return isValid;
+        }
+
+        // Fungsi untuk mengirim data ke Google Form
+        function submitToGoogleForm(formData) {
+            // Buat URL dengan parameter
+            const params = new URLSearchParams();
+            
+            // Tambahkan parameter sesuai dengan entry IDs
+            params.append('entry.1857143359', formData.name);      // Nama
+            params.append('entry.1449502940', formData.province);  // Provinsi
+            params.append('entry.356299444', formData.phone);      // No Telepon
+            
+            // Kirim data menggunakan fetch
+            fetch(GOOGLE_FORM_URL, {
+                method: 'POST',
+                body: params,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                console.log('Data berhasil dikirim ke Google Form');
+                
+                // SIMPAN DATA KE LOCALSTORAGE UNTUK DIGUNAKAN DI FILE LAIN
+                localStorage.setItem('guestName', formData.name);
+                localStorage.setItem('guestProvince', formData.province);
+                localStorage.setItem('guestPhone', formData.phone);
+                localStorage.setItem('guestVisitTime', new Date().toISOString());
+                
+                showSuccessMessage();
+            })
+            .catch(error => {
+                console.error('Error mengirim data:', error);
+                // Tetap simpan data dan redirect meskipun ada error
+                localStorage.setItem('guestName', formData.name);
+                localStorage.setItem('guestProvince', formData.province);
+                localStorage.setItem('guestPhone', formData.phone);
+                localStorage.setItem('guestVisitTime', new Date().toISOString());
+                
+                showSuccessMessage();
+            });
+        }
+
+        // Fungsi untuk menampilkan pesan sukses dan redirect
+        function showSuccessMessage() {
+            // Tampilkan pesan sukses
+            document.getElementById('guestbookForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Mulai redirect ke file lain
+            startRedirect();
+        }
+
+        // Fungsi untuk redirect ke file lain
+        function startRedirect() {
+            let countdown = 3;
+            const countdownElement = document.getElementById('countdown');
+            const redirectProgress = document.getElementById('redirectProgress');
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                // Update progress bar
+                const progress = 100 - (countdown * 20);
+                redirectProgress.style.width = progress + '%';
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    // REDIRECT KE FILE LAIN
+                    window.location.href = REDIRECT_URL;
+                }
+            }, 1000);
+        }
+
+        // Event listener untuk form buku tamu
+        document.getElementById('guestbookForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validasi form
+            if (!validateForm()) {
+                return;
+            }
+            
+            const name = document.getElementById('guestName').value.trim();
+            const province = document.getElementById('guestProvince').value;
+            const phone = document.getElementById('guestPhone').value.trim();
+            
+            // Tampilkan loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+            submitBtn.disabled = true;
+            
+            // Data untuk dikirim ke Google Form
+            const formData = {
+                name: name,
+                province: province,
+                phone: phone
+            };
+            
+            // Kirim data ke Google Form
+            submitToGoogleForm(formData);
+            
+            // Reset button setelah beberapa saat
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+
+        // Event listener untuk validasi real-time
+        document.getElementById('guestName').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                document.getElementById('nameError').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('guestProvince').addEventListener('change', function() {
+            if (this.value) {
+                this.classList.remove('error');
+                document.getElementById('provinceError').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('guestPhone').addEventListener('input', function() {
+            // Hanya izinkan input angka
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            const phoneRegex = /^[0-9]+$/;
+            if (phoneRegex.test(this.value) && this.value.length >= 10) {
+                this.classList.remove('error');
+                document.getElementById('phoneError').style.display = 'none';
+            }
+        });
+
+        // Inisialisasi loading screen ketika halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tampilkan loading screen dan lanjut ke buku tamu
+            setTimeout(initLoadingScreen, 500);
+        });
+    </script>
+</body>
+</html>
