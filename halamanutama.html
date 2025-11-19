@@ -1,0 +1,2879 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistenku - Platform Kesehatan Digital Indonesia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+    <!-- Leaflet CSS untuk peta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <style>
+        /* ===== VARIABLES & RESET ===== */
+        :root {
+            --primary: #3498DB;
+            --primary-dark: #2980B9;
+            --secondary: #27AE60;
+            --secondary-dark: #219653;
+            --accent: #E67E22;
+            --warning: #F39C12;
+            --error: #E74C3C;
+            --light-bg: #E8F4F8;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --gray: #6C757D;
+            --dark: #2C3E50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            
+            /* Dark mode variables - default values */
+            --bg-color: #E8F4F8;
+            --text-color: #2C3E50;
+            --card-bg: #FFFFFF;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --footer-bg: #2C3E50;
+            --footer-text: #FFFFFF;
+            --input-bg: #FFFFFF;
+            --input-border: #E5E7EB;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --card-bg: #16213e;
+            --header-bg: rgba(26, 26, 46, 0.95);
+            --footer-bg: #0f1419;
+            --footer-text: #e6e6e6;
+            --input-bg: #16213e;
+            --input-border: #2a3a5a;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --light-bg: #1a1a2e;
+            --light-gray: #16213e;
+            --gray: #a0a0a0;
+            --dark: #e6e6e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-error {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .btn-error:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px var(--shadow-color);
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--gray);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .float-animation {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        /* ===== POPUP STYLES ===== */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .popup.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .popup-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--input-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .popup-close:hover {
+            color: var(--error);
+        }
+
+        .popup-body {
+            padding: 25px;
+        }
+
+        .popup-footer {
+            padding: 15px 25px;
+            border-top: 1px solid var(--input-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .calculator-result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--light-bg);
+            border-radius: var(--radius);
+            display: none;
+        }
+
+        .calculator-result.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .result-category {
+            padding: 8px 15px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .result-underweight {
+            background-color: #FFEAA7;
+            color: #E17055;
+        }
+
+        .result-normal {
+            background-color: #55EFC4;
+            color: #00B894;
+        }
+
+        .result-overweight {
+            background-color: #FDCB6E;
+            color: #E17055;
+        }
+
+        .result-obese {
+            background-color: #FF7675;
+            color: #D63031;
+        }
+
+        /* ===== ABSTRACT SHAPES ===== */
+        .abstract-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        .shape-1 {
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            top: 10%;
+            left: 5%;
+            animation-duration: 25s;
+        }
+
+        .shape-2 {
+            width: 100px;
+            height: 100px;
+            background: var(--secondary);
+            top: 70%;
+            right: 10%;
+            animation-duration: 20s;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            bottom: 20%;
+            left: 15%;
+            animation-duration: 30s;
+            animation-delay: 5s;
+        }
+
+        .shape-4 {
+            width: 120px;
+            height: 120px;
+            background: var(--warning);
+            top: 30%;
+            right: 20%;
+            animation-duration: 22s;
+            animation-delay: 7s;
+        }
+
+        .shape-5 {
+            width: 90px;
+            height: 90px;
+            background: var(--error);
+            bottom: 40%;
+            right: 5%;
+            animation-duration: 28s;
+            animation-delay: 3s;
+        }
+
+        /* ===== HEADER & NAVIGATION ===== */
+        header {
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(15deg);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* Nav Controls */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1100;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-color);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px 30px;
+            transition: right 0.4s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .nav-links.active {
+            right: 0;
+        }
+
+        .nav-links li {
+            margin-bottom: 15px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .theme-toggle input {
+            display: none;
+        }
+
+        .toggle-slider {
+            width: 50px;
+            height: 24px;
+            background-color: var(--gray);
+            border-radius: 34px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
+        .toggle-icons i {
+            font-size: 1rem;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-gray) 100%);
+            padding: 180px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(52,152,219,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        [data-theme="dark"] .hero::before {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(52,152,219,0.1)"/></svg>');
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--gray);
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 57%;
+            transform: translateY(-50%);
+            width: 45%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            object-fit: contain;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-image-placeholder {
+            width: 100%;
+            height: 110%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* ===== FEATURES SECTION ===== */
+        .features {
+            background-color: var(--card-bg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-gray) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: var(--gradient);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* ===== EDUCATION SECTION ===== */
+        .education {
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--light-bg) 100%);
+        }
+
+        .education-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .level-card {
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 320px;
+        }
+
+        .level-card .btn {
+            margin-top: auto;
+            align-self: center;
+        }
+
+        /* Ikon pendidikan dengan warna solid */
+        .level-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-gray) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .level-card:hover .level-icon {
+            background: var(--gradient);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .material-card {
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .material-card h4 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .material-icon {
+            margin-right: 10px;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .material-card:hover .material-icon {
+            transform: rotate(15deg);
+        }
+
+        /* ===== HEALTHCARE FINDER SECTION ===== */
+        .healthcare-finder {
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--light-bg) 100%);
+        }
+
+        .finder-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .filters {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            height: fit-content;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .filter-option:hover {
+            color: var(--primary);
+        }
+
+        .filter-option input {
+            margin-right: 8px;
+        }
+
+        /* Peta Styles */
+        .map-container {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 0;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        #healthcare-map {
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius);
+        }
+
+        .search-box {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            gap: 8px;
+            background: var(--card-bg);
+            padding: 8px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input {
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            width: 320px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        .search-box button {
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .map-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .map-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* ===== CALCULATORS SECTION ===== */
+        .calculators {
+            background-color: var(--card-bg);
+        }
+
+        .calculators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .calculator-card {
+            text-align: center;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 350px;
+        }
+
+        .calculator-card .btn {
+            margin-top: auto;
+            align-self: center;
+        }
+
+        /* Ikon kalkulator dengan warna solid */
+        .calculator-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-gray) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .calculator-card:hover .calculator-icon {
+            background: var(--gradient);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ===== CHILD DEVELOPMENT SECTION ===== */
+        .child-development {
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--light-bg) 100%);
+        }
+
+        .dev-calculator {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .dev-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .dev-result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--light-bg);
+            border-radius: var(--radius);
+            display: none;
+        }
+
+        .dev-result.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .milestone-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .milestone-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        .milestone-list li:last-child {
+            border-bottom: none;
+        }
+
+        .milestone-list i {
+            color: var(--secondary);
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* ===== EMERGENCY SECTION ===== */
+        .emergency {
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--light-bg) 100%);
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .emergency-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 4px solid var(--error);
+            transition: all 0.3s ease;
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.15);
+        }
+
+        /* Ikon darurat dengan warna solid */
+        .emergency-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: var(--error);
+            transition: all 0.3s ease;
+        }
+
+        .emergency-card:hover .emergency-icon {
+            background: var(--error);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .emergency-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--error);
+            margin: 10px 0;
+        }
+
+        .emergency-btn {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .emergency-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .emergency-tips, .emergency-hospitals {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .emergency-tips h4, .emergency-hospitals h4 {
+            color: var(--error);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .emergency-tips ul {
+            list-style: none;
+        }
+
+        .emergency-tips li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .emergency-tips i {
+            color: var(--secondary);
+            margin-right: 10px;
+        }
+
+        .hospital-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hospital-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        .hospital-item:last-child {
+            border-bottom: none;
+        }
+
+        .hospital-item span {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--footer-text);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #BDC3C7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #BDC3C7;
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) {
+            .finder-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero {
+                text-align: center;
+                padding: 150px 0 80px;
+            }
+            
+            .hero-content {
+                margin: 0 auto;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                width: 250px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .emergency-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .dev-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box {
+                width: 90%;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 130px 0 60px;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .emergency-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .toggle-icons {
+                display: none;
+            }
+            
+            .nav-links {
+                width: 100%;
+            }
+            
+            .dev-calculator {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Abstract Shapes Background -->
+    <div class="abstract-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="logo-text">Asistenku</div>
+                </a>
+                
+                <div class="nav-controls">
+                    <div class="theme-toggle">
+                        <input type="checkbox" id="themeToggle">
+                        <label for="themeToggle" class="toggle-slider"></label>
+                        <div class="toggle-icons">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="hamburger-menu" id="hamburgerMenu">
+                        <div class="hamburger-line"></div>
+                        <div class="hamburger-line"></div>
+                        <div class="hamburger-line"></div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Navigation Overlay -->
+        <div class="nav-overlay" id="navOverlay"></div>
+        
+        <!-- Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" class="active">Beranda</a></li>
+            <li><a href="#education">Pembelajaran</a></li>
+            <li><a href="#healthcare">Layanan Kesehatan</a></li>
+            <li><a href="#calculators">Kalkulator</a></li>
+            <li><a href="#child-dev">Perkembangan Anak</a></li>
+            <li><a href="#emergency">Darurat</a></li>
+        </ul>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in-up">Kesehatan Anda, Prioritas Kami</h1>
+                <p class="fade-in-up">Platform kesehatan digital terpercaya yang menggabungkan edukasi, diagnosa AI, dan akses ke layanan kesehatan terdekat untuk masyarakat Indonesia.</p>
+                
+                <div class="hero-buttons fade-in-up">
+                    <a href="#education" class="btn btn-primary">Pelajari Kesehatan</a>
+                    <a href="#calculators" class="btn btn-outline">Cek Kesehatan</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <!-- Gambar dokter.png -->
+                <img src="dokter.png" alt="Dokter" class="hero-image" onerror="this.style.display='none'; document.querySelector('.hero-image-placeholder').style.display='flex'">
+                <!-- Fallback jika gambar tidak ditemukan -->
+                <div class="hero-image-placeholder" style="display: none;">
+                    <i class="fas fa-user-md"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section features" id="features">
+        <div class="container">
+            <h2 class="section-title">Layanan Unggulan Kami</h2>
+            <p class="section-subtitle">Kami menyediakan solusi kesehatan komprehensif untuk memenuhi kebutuhan kesehatan Anda dan keluarga</p>
+            
+            <div class="features-grid">
+                <div class="card feature-card slide-in-left">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Edukasi Kesehatan</h3>
+                    <p>Materi pembelajaran kesehatan terstruktur untuk semua jenjang pendidikan dari anak-anak hingga umum.</p>
+                </div>
+                
+                <div class="card feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>i-Doc AI Assistant</h3>
+                    <p>Konsultasi gejala penyakit dengan asisten AI untuk diagnosis awal dan rekomendasi penanganan.</p>
+                </div>
+                
+                <div class="card feature-card slide-in-right">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Temukan Layanan Kesehatan</h3>
+                    <p>Cari dan temukan fasilitas kesehatan terdekat seperti rumah sakit, klinik, dan apotek.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section education">
+        <div class="container">
+            <h2 class="section-title">Pembelajaran Kesehatan</h2>
+            <p class="section-subtitle">Tingkatkan literasi kesehatan dengan materi yang disesuaikan untuk setiap jenjang pendidikan</p>
+            
+            <div class="education-levels">
+                <div class="card level-card slide-in-left">
+                    <div class="level-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3>Jenjang Anak-anak</h3>
+                    <p>Materi kesehatan dasar dengan pendekatan visual dan interaktif untuk anak-anak.</p>
+                    <a href="materi-anak.html" class="btn btn-primary">Jelajahi</a>
+                </div>
+                
+                <div class="card level-card fade-in-up">
+                    <div class="level-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Jenjang Remaja</h3>
+                    <p>Pembelajaran kesehatan remaja dengan fokus pada pertumbuhan dan perkembangan.</p>
+                    <a href="materi-remaja.html" class="btn btn-primary">Jelajahi</a>
+                </div>
+                
+                <div class="card level-card fade-in-up">
+                    <div class="level-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Jenjang Dewasa</h3>
+                    <p>Materi kesehatan lanjutan untuk persiapan pendidikan tinggi dan kehidupan dewasa.</p>
+                    <a href="materi-dewasa.html" class="btn btn-primary">Jelajahi</a>
+                </div>
+                
+                <div class="card level-card slide-in-right">
+                    <div class="level-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Umum</h3>
+                    <p>Informasi kesehatan untuk masyarakat umum dengan berbagai topik terkini.</p>
+                    <a href="materi-umum.html" class="btn btn-primary">Jelajahi</a>
+                </div>
+            </div>
+            
+            <h3 style="text-align: center; margin: 40px 0 20px;">Materi Populer</h3>
+            <div class="materials-grid">
+                <div class="card material-card slide-in-left">
+                    <h4><i class="fas fa-heartbeat material-icon"></i> Penyakit Jantung</h4>
+                    <p>Pelajari tentang pencegahan, gejala, dan penanganan penyakit jantung.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;" onclick="openMaterialDetail('jantung')">Baca Selengkapnya</button>
+                </div>
+                
+                <div class="card material-card fade-in-up">
+                    <h4><i class="fas fa-brain material-icon"></i> Kesehatan Mental</h4>
+                    <p>Pahami pentingnya kesehatan mental dan cara mengelola stres.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;" onclick="openMaterialDetail('mental')">Baca Selengkapnya</button>
+                </div>
+                
+                <div class="card material-card slide-in-right">
+                    <h4><i class="fas fa-apple-alt material-icon"></i> Gizi Seimbang</h4>
+                    <p>Ketahui pola makan sehat untuk menjaga kesehatan tubuh.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;" onclick="openMaterialDetail('gizi')">Baca Selengkapnya</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Healthcare Finder Section -->
+    <section id="healthcare" class="section healthcare-finder">
+        <div class="container">
+            <h2 class="section-title">Temukan Layanan Kesehatan</h2>
+            <p class="section-subtitle">Cari dan temukan fasilitas kesehatan terdekat sesuai kebutuhan Anda</p>
+            
+            <div class="finder-container">
+                <div class="filters">
+                    <h3>Filter Pencarian</h3>
+                    
+                    <div class="filter-group">
+                        <h4>Jenis Fasilitas</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" checked id="filter-hospital"> Rumah Sakit
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" checked id="filter-clinic"> Klinik
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" checked id="filter-health-center"> Puskesmas
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" checked id="filter-pharmacy"> Apotek
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" id="filter-laboratory"> Laboratorium
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h4>Jarak</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="radio" name="distance" value="5" checked> &lt; 5 km
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="distance" value="10"> 5 - 10 km
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="distance" value="20"> 10 - 20 km
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="distance" value="all"> Semua Jarak
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h4>Layanan</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" id="filter-igd"> IGD 24 Jam
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" id="filter-inpatient"> Rawat Inap
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" id="filter-bpjs"> BPJS
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" id="filter-insurance"> Asuransi
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="applyFilters">Terapkan Filter</button>
+                </div>
+                
+                <div class="map-container">
+                    <div class="search-box">
+                        <input id="searchHospital" placeholder="Cari nama rumah sakit (contoh: RSUP Sanglah)" />
+                        <button onclick="findHospitalByName()">Cari</button>
+                    </div>
+                    <div id="healthcare-map"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculators Section -->
+    <section id="calculators" class="section calculators">
+        <div class="container">
+            <h2 class="section-title">Kalkulator Kesehatan</h2>
+            <p class="section-subtitle">Hitung dan pantau indikator kesehatan penting dengan kalkulator kami</p>
+            
+            <div class="calculators-grid">
+                <div class="card calculator-card slide-in-left">
+                    <div class="calculator-icon">
+                        <i class="fas fa-weight"></i>
+                    </div>
+                    <h3>Kalkulator BMI</h3>
+                    <p>Hitung Indeks Massa Tubuh untuk mengetahui status berat badan Anda.</p>
+                    <button class="btn btn-primary calculator-btn" data-calculator="bmi">Hitung Sekarang</button>
+                </div>
+                
+                <div class="card calculator-card fade-in-up">
+                    <div class="calculator-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Kalkulator Denyut Jantung</h3>
+                    <p>Hitung denyut jantung maksimal dan zona latihan ideal untuk kesehatan jantung.</p>
+                    <button class="btn btn-primary calculator-btn" data-calculator="heart">Hitung Sekarang</button>
+                </div>
+                
+                <div class="card calculator-card slide-in-right">
+                    <div class="calculator-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Kalkulator Kalori</h3>
+                    <p>Hitung kebutuhan kalori harian berdasarkan usia, berat badan, dan aktivitas.</p>
+                    <button class="btn btn-primary calculator-btn" data-calculator="calorie">Hitung Sekarang</button>
+                </div>
+                
+                <!-- Tambahan Kalkulator Kebutuhan Cairan -->
+                <div class="card calculator-card fade-in-up">
+                    <div class="calculator-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3>Kalkulator Kebutuhan Cairan</h3>
+                    <p>Hitung kebutuhan cairan harian berdasarkan berat badan, aktivitas, dan kondisi kesehatan.</p>
+                    <button class="btn btn-primary calculator-btn" data-calculator="water">Hitung Sekarang</button>
+                </div>
+                
+                <!-- Kalkulator Pembakaran Kalori Baru -->
+                <div class="card calculator-card fade-in-up">
+                    <div class="calculator-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3>Kalkulator Pembakaran Kalori</h3>
+                    <p>Hitung estimasi kalori yang terbakar berdasarkan aktivitas fisik dan durasi.</p>
+                    <button class="btn btn-primary calculator-btn" data-calculator="calorie-burn">Hitung Sekarang</button>
+                </div>
+                
+                <!-- Kalkulator Kehamilan Baru -->
+                <div class="card calculator-card slide-in-right">
+                    <div class="calculator-icon">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <h3>Kalkulator Kehamilan</h3>
+                    <p>Pantau perkembangan kehamilan dan perkiraan tanggal persalinan.</p>
+                    <button class="btn btn-primary calculator-btn" data-calculator="pregnancy">Hitung Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Child Development Section -->
+    <section id="child-dev" class="section child-development">
+        <div class="container">
+            <h2 class="section-title">Perkembangan Anak</h2>
+            <p class="section-subtitle">Pantau perkembangan anak Anda sesuai dengan usianya</p>
+            
+            <div class="dev-calculator">
+                <h3 style="text-align: center; margin-bottom: 30px;">Cek Perkembangan Anak</h3>
+                
+                <div class="dev-form">
+                    <div class="form-group">
+                        <label for="childAge">Usia Anak (bulan)</label>
+                        <input type="number" id="childAge" placeholder="Masukkan usia dalam bulan" min="0" max="72">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="childGender">Jenis Kelamin</label>
+                        <select id="childGender">
+                            <option value="male">Laki-laki</option>
+                            <option value="female">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="checkDev" style="width: 100%;">Cek Perkembangan</button>
+                
+                <div class="dev-result" id="devResult">
+                    <h4>Perkembangan yang Diharapkan:</h4>
+                    <ul class="milestone-list" id="milestoneList">
+                        <!-- Hasil akan dimasukkan di sini oleh JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section id="emergency" class="section emergency">
+        <div class="container">
+            <h2 class="section-title">Darurat Medis</h2>
+            <p class="section-subtitle">Layanan darurat dan kontak penting untuk situasi gawat darurat</p>
+            
+            <div class="emergency-grid">
+                <div class="card emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <h3>Ambulans Darurat</h3>
+                    <p class="emergency-number">118 / 119</p>
+                    <p>Layanan ambulans 24 jam untuk gawat darurat</p>
+                    <button class="btn btn-error emergency-btn" onclick="openEmergencyPopup('ambulans')">
+                        <i class="fas fa-phone"></i> Panggil Sekarang
+                    </button>
+                </div>
+                
+                <div class="card emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Hotline Kemenkes</h3>
+                    <p class="emergency-number">1500-567</p>
+                    <p>Hotline Kementerian Kesehatan RI</p>
+                    <button class="btn btn-outline emergency-btn" onclick="openEmergencyPopup('kemenkes')">
+                        <i class="fas fa-phone"></i> Hubungi
+                    </button>
+                </div>
+                
+                <div class="card emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-skull-crossbones"></i>
+                    </div>
+                    <h3>Pusat Keracunan</h3>
+                    <p class="emergency-number">(021) 425-0767</p>
+                    <p>Pusat informasi dan penanganan keracunan</p>
+                    <button class="btn btn-outline emergency-btn" onclick="openEmergencyPopup('keracunan')">
+                        <i class="fas fa-phone"></i> Hubungi
+                    </button>
+                </div>
+                
+                <div class="card emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Konsultasi Darurat</h3>
+                    <p class="emergency-number">0800-100-1234</p>
+                    <p>Konsultasi medis darurat via telepon</p>
+                    <button class="btn btn-outline emergency-btn" onclick="openEmergencyPopup('konsultasi')">
+                        <i class="fas fa-phone"></i> Hubungi
+                    </button>
+                </div>
+            </div>
+            
+            <div class="emergency-info">
+                <div class="emergency-tips">
+                    <h4>Yang Harus Dilakukan dalam Keadaan Darurat :</h4>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Tetap tenang dan jangan panik</li>
+                        <li><i class="fas fa-check-circle"></i> Segera hubungi nomor darurat</li>
+                        <li><i class="fas fa-check-circle"></i> Sampaikan lokasi dengan jelas</li>
+                        <li><i class="fas fa-check-circle"></i> Jelaskan kondisi korban secara singkat</li>
+                        <li><i class="fas fa-check-circle"></i> Ikuti instruksi dari operator</li>
+                    </ul>
+                </div>
+                
+                <div class="emergency-hospitals">
+                    <h4>Rumah Sakit Rujukan Darurat:</h4>
+                    <div class="hospital-list">
+                        <div class="hospital-item">
+                            <strong>RSCM Jakarta</strong>
+                            <span>(021) 150-0135</span>
+                        </div>
+                        <div class="hospital-item">
+                            <strong>RS. Fatmawati Jakarta</strong>
+                            <span>(021) 750-1524</span>
+                        </div>
+                        <div class="hospital-item">
+                            <strong>RS. Hasan Sadikin Bandung</strong>
+                            <span>(022) 203-4953</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Asistenku</h3>
+                    <p>Platform kesehatan digital terpercaya untuk masyarakat Indonesia. Menyediakan edukasi kesehatan, konsultasi AI, dan akses ke layanan kesehatan.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Layanan</h3>
+                    <ul class="footer-links">
+                        <li><a href="#education">Edukasi Kesehatan</a></li>
+                        <li><a href="#healthcare">Temukan Layanan Kesehatan</a></li>
+                        <li><a href="#calculators">Kalkulator Kesehatan</a></li>
+                        <li><a href="#child-dev">Perkembangan Anak</a></li>
+                        <li><a href="#emergency">Darurat Medis</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Perusahaan</h3>
+                    <ul class="footer-links">
+                        <li><a href="perusahaan.html">Tentang Kami</a></li>
+                        <li><a href="#perusahaan.html">Tim Kami</a></li>
+                        <li><a href="#perusahaan.html">Karir</a></li>
+                        <li><a href="#perusahaan.html">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Bantuan</h3>
+                    <ul class="footer-links">
+                        <li><a href="info.html#faq">FAQ</a></li>
+                        <li><a href="info.html#privacy">Kebijakan Privasi</a></li>
+                        <li><a href="info.html#terms">Syarat & Ketentuan</a></li>
+                        <li><a href="info.html#contact">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Asistenku. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Calculator Popup -->
+    <div class="popup-overlay" id="calculatorPopup">
+        <div class="popup" id="popupContent">
+            <div class="popup-header">
+                <h3><i class="fas fa-calculator"></i> <span id="popupTitle">Kalkulator BMI</span></h3>
+                <button class="popup-close" id="popupClose">&times;</button>
+            </div>
+            <div class="popup-body">
+                <div class="calculator-form" id="calculatorForm">
+                    <!-- Form akan diisi oleh JavaScript -->
+                </div>
+                <div class="calculator-result" id="calculatorResult">
+                    <!-- Hasil akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-outline" id="resetCalculator">Reset</button>
+                <button class="btn btn-primary" id="calculateBtn">Hitung</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Popup -->
+    <div class="popup-overlay" id="materialPopup">
+        <div class="popup">
+            <div class="popup-header">
+                <h3><i class="fas fa-book"></i> <span id="materialTitle">Materi Pendidikan</span></h3>
+                <button class="popup-close" onclick="closeMaterialPopup()">&times;</button>
+            </div>
+            <div class="popup-body">
+                <div id="materialContent">
+                    <!-- Konten materi akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-primary" onclick="closeMaterialPopup()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Popup -->
+    <div class="popup-overlay" id="emergencyPopup">
+        <div class="popup">
+            <div class="popup-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> <span id="emergencyTitle">Darurat Medis</span></h3>
+                <button class="popup-close" onclick="closeEmergencyPopup()">&times;</button>
+            </div>
+            <div class="popup-body">
+                <div id="emergencyContent">
+                    <!-- Konten darurat akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-error" id="emergencyCallBtn">
+                    <i class="fas fa-phone"></i> Hubungi Sekarang
+                </button>
+                <button class="btn btn-outline" onclick="closeEmergencyPopup()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- i-Doc Chatbot -->
+    <div id="n8n-chat"></div>
+
+    <!-- Leaflet JS untuk peta -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+    <script>
+        // ========== FUNGSI UTAMA ==========
+        
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        function setupDarkMode() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.checked = true;
+            }
+        }
+
+        function toggleDarkMode() {
+            if (themeToggle.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Navigation Mobile
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const navLinks = document.getElementById('navLinks');
+        const navOverlay = document.getElementById('navOverlay');
+
+        function toggleMobileMenu() {
+            hamburgerMenu.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            hamburgerMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+            navOverlay.classList.remove('active');
+        }
+
+        // ========== FUNGSI PETA FASILITAS KESEHATAN ==========
+        let healthcareMap;
+        let healthcareMarkers;
+        let allHealthcareData = [];
+
+        function initializeHealthcareMap() {
+            // Inisialisasi peta
+            healthcareMap = L.map('healthcare-map').setView([-8.65, 115.22], 10);
+
+            // Tambahkan tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(healthcareMap);
+
+            // Inisialisasi marker cluster
+            healthcareMarkers = L.markerClusterGroup();
+            healthcareMap.addLayer(healthcareMarkers);
+
+            // Ambil data fasilitas kesehatan dari Overpass API
+            loadHealthcareData();
+        }
+
+        function loadHealthcareData() {
+            // Overpass query: cari amenity=hospital di area dengan nama "Bali"
+            const overpassQuery = `
+                [out:json][timeout:60];
+                area["name"="Bali"][admin_level=4]->.searchArea;
+                (
+                node["amenity"="hospital"](area.searchArea);
+                way["amenity"="hospital"](area.searchArea);
+                relation["amenity"="hospital"](area.searchArea);
+                );
+                out center;
+            `;
+
+            // Ambil data dari Overpass public server
+            fetch('https://overpass-api.de/api/interpreter', {
+                method: 'POST',
+                body: overpassQuery,
+                headers: { 'Content-Type': 'text/plain' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(!data.elements || data.elements.length === 0) {
+                    console.log("Tidak ditemukan rumah sakit di area ini (atau query gagal).");
+                    return;
+                }
+
+                // Simpan semua data
+                allHealthcareData = data.elements;
+
+                // Tampilkan semua marker
+                displayHealthcareMarkers(allHealthcareData);
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Gagal mengambil data fasilitas kesehatan. Coba lagi nanti.');
+            });
+        }
+
+        function displayHealthcareMarkers(data) {
+            // Hapus semua marker sebelumnya
+            healthcareMarkers.clearLayers();
+
+            // Tambahkan marker untuk setiap fasilitas kesehatan
+            data.forEach(el => {
+                let lat = el.lat || (el.center && el.center.lat);
+                let lon = el.lon || (el.center && el.center.lon);
+                if(!lat || !lon) return;
+
+                let name = (el.tags && el.tags.name) ? el.tags.name : "Rumah Sakit (tanpa nama)";
+                let addr = [];
+                if(el.tags){
+                    ['addr:street','addr:city','addr:province','addr:postcode'].forEach(k=>{
+                        if(el.tags[k]) addr.push(el.tags[k]);
+                    });
+                }
+                let popup = `<b>${name}</b><br>${addr.join(', ')}`;
+
+                const m = L.marker([lat,lon]).bindPopup(popup);
+                m.options.customName = name.toLowerCase();
+                healthcareMarkers.addLayer(m);
+            });
+        }
+
+        function findHospitalByName() {
+            const q = document.getElementById('searchHospital').value.trim().toLowerCase();
+            if(!q) {
+                alert('Masukkan nama rumah sakit yang ingin dicari.');
+                return;
+            }
+
+            let found = null;
+            healthcareMarkers.eachLayer(m => {
+                if(m.options.customName && m.options.customName.includes(q) && !found) {
+                    found = m;
+                }
+            });
+
+            if(found) {
+                healthcareMap.setView(found.getLatLng(), 16);
+                found.openPopup();
+            } else {
+                alert('Tidak ditemukan rumah sakit dengan nama tersebut. Coba kata kunci lain.');
+            }
+        }
+
+        function applyHealthcareFilters() {
+            // Implementasi filter berdasarkan jenis fasilitas
+            const hospitalChecked = document.getElementById('filter-hospital').checked;
+            const clinicChecked = document.getElementById('filter-clinic').checked;
+            const healthCenterChecked = document.getElementById('filter-health-center').checked;
+            const pharmacyChecked = document.getElementById('filter-pharmacy').checked;
+            const laboratoryChecked = document.getElementById('filter-laboratory').checked;
+
+            // Filter data berdasarkan checkbox yang dipilih
+            const filteredData = allHealthcareData.filter(el => {
+                // Implementasi filter berdasarkan jenis fasilitas
+                // (Dalam implementasi nyata, Anda perlu menyesuaikan dengan data yang tersedia)
+                return true; // Placeholder
+            });
+
+            // Tampilkan marker yang sudah difilter
+            displayHealthcareMarkers(filteredData);
+        }
+
+        // ========== FUNGSI KALKULATOR ==========
+        const calculatorPopup = document.getElementById('calculatorPopup');
+        const popupContent = document.getElementById('popupContent');
+        const popupTitle = document.getElementById('popupTitle');
+        const calculatorForm = document.getElementById('calculatorForm');
+        const calculatorResult = document.getElementById('calculatorResult');
+        const popupClose = document.getElementById('popupClose');
+        const resetCalculator = document.getElementById('resetCalculator');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const calculatorBtns = document.querySelectorAll('.calculator-btn');
+
+        let currentCalculator = '';
+
+        // Fungsi untuk membuka popup kalkulator
+        function openCalculator(calculatorType) {
+            currentCalculator = calculatorType;
+            calculatorResult.classList.remove('active');
+            
+            // Set judul popup
+            switch(calculatorType) {
+                case 'bmi':
+                    popupTitle.textContent = 'Kalkulator BMI';
+                    break;
+                case 'heart':
+                    popupTitle.textContent = 'Kalkulator Denyut Jantung';
+                    break;
+                case 'calorie':
+                    popupTitle.textContent = 'Kalkulator Kalori';
+                    break;
+                case 'water':
+                    popupTitle.textContent = 'Kalkulator Kebutuhan Cairan';
+                    break;
+                case 'calorie-burn':
+                    popupTitle.textContent = 'Kalkulator Pembakaran Kalori';
+                    break;
+                case 'pregnancy':
+                    popupTitle.textContent = 'Kalkulator Kehamilan';
+                    break;
+            }
+            
+            // Set form berdasarkan jenis kalkulator
+            setCalculatorForm(calculatorType);
+            
+            // Tampilkan popup
+            calculatorPopup.classList.add('active');
+            popupContent.classList.add('active');
+        }
+
+        // Fungsi untuk menutup popup kalkulator
+        function closeCalculatorPopup() {
+            calculatorPopup.classList.remove('active');
+            popupContent.classList.remove('active');
+        }
+
+        // Fungsi untuk mengatur form kalkulator
+        function setCalculatorForm(calculatorType) {
+            let formHTML = '';
+            
+            switch(calculatorType) {
+                case 'bmi':
+                    formHTML = `
+                        <div class="form-group">
+                            <label for="weight">Berat Badan (kg)</label>
+                            <input type="number" id="weight" placeholder="Masukkan berat badan" min="1" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Tinggi Badan (cm)</label>
+                            <input type="number" id="height" placeholder="Masukkan tinggi badan" min="50" max="250">
+                        </div>
+                    `;
+                    break;
+                case 'heart':
+                    formHTML = `
+                        <div class="form-group">
+                            <label for="age">Usia (tahun)</label>
+                            <input type="number" id="age" placeholder="Masukkan usia" min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="restingHeartRate">Denyut Jantung Istirahat (bpm)</label>
+                            <input type="number" id="restingHeartRate" placeholder="Masukkan denyut jantung istirahat" min="30" max="120">
+                        </div>
+                    `;
+                    break;
+                case 'calorie':
+                    formHTML = `
+                        <div class="form-group">
+                            <label for="calorieAge">Usia (tahun)</label>
+                            <input type="number" id="calorieAge" placeholder="Masukkan usia" min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="calorieWeight">Berat Badan (kg)</label>
+                            <input type="number" id="calorieWeight" placeholder="Masukkan berat badan" min="1" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="calorieHeight">Tinggi Badan (cm)</label>
+                            <input type="number" id="calorieHeight" placeholder="Masukkan tinggi badan" min="50" max="250">
+                        </div>
+                        <div class="form-group">
+                            <label for="activityLevel">Tingkat Aktivitas</label>
+                            <select id="activityLevel">
+                                <option value="1.2">Sedentary (sedikit atau tidak berolahraga)</option>
+                                <option value="1.375">Ringan (olahraga ringan 1-3 hari/minggu)</option>
+                                <option value="1.55">Sedang (olahraga sedang 3-5 hari/minggu)</option>
+                                <option value="1.725">Aktif (olahraga berat 6-7 hari/minggu)</option>
+                                <option value="1.9">Sangat Aktif (olahraga sangat berat & pekerjaan fisik)</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'water':
+                    formHTML = `
+                        <div class="form-group">
+                            <label for="waterWeight">Berat Badan (kg)</label>
+                            <input type="number" id="waterWeight" placeholder="Masukkan berat badan" min="1" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="waterActivity">Tingkat Aktivitas</label>
+                            <select id="waterActivity">
+                                <option value="30">Sedentary (sedikit aktivitas)</option>
+                                <option value="35">Ringan (aktivitas ringan)</option>
+                                <option value="40">Sedang (aktivitas sedang)</option>
+                                <option value="45">Tinggi (aktivitas tinggi)</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'calorie-burn':
+                    formHTML = `
+                        <div class="form-group">
+                            <label for="activityType">Jenis Aktivitas</label>
+                            <select id="activityType">
+                                <option value="7">Berjalan (5 km/jam)</option>
+                                <option value="8">Jogging (8 km/jam)</option>
+                                <option value="10">Lari (10 km/jam)</option>
+                                <option value="5">Bersepeda (sedang)</option>
+                                <option value="8">Berenang (sedang)</option>
+                                <option value="3">Yoga</option>
+                                <option value="6">Aerobik</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Durasi (menit)</label>
+                            <input type="number" id="duration" placeholder="Masukkan durasi aktivitas" min="1" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="burnWeight">Berat Badan (kg)</label>
+                            <input type="number" id="burnWeight" placeholder="Masukkan berat badan" min="1" max="300">
+                        </div>
+                    `;
+                    break;
+                case 'pregnancy':
+                    formHTML = `
+                        <div class="form-group">
+                            <label for="lastPeriod">Hari Pertama Haid Terakhir</label>
+                            <input type="date" id="lastPeriod">
+                        </div>
+                        <div class="form-group">
+                            <label for="cycleLength">Panjang Siklus Haid (hari)</label>
+                            <input type="number" id="cycleLength" placeholder="Biasanya 28 hari" min="21" max="35" value="28">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            calculatorForm.innerHTML = formHTML;
+        }
+
+        // Fungsi untuk menghitung berdasarkan jenis kalkulator
+        function calculate() {
+            let resultHTML = '';
+            
+            switch(currentCalculator) {
+                case 'bmi':
+                    const weight = parseFloat(document.getElementById('weight').value);
+                    const height = parseFloat(document.getElementById('height').value) / 100; // Convert to meters
+                    
+                    if (weight && height) {
+                        const bmi = weight / (height * height);
+                        let category = '';
+                        let categoryClass = '';
+                        
+                        if (bmi < 18.5) {
+                            category = 'Underweight (Kekurangan berat badan)';
+                            categoryClass = 'result-underweight';
+                        } else if (bmi < 25) {
+                            category = 'Normal (Berat badan ideal)';
+                            categoryClass = 'result-normal';
+                        } else if (bmi < 30) {
+                            category = 'Overweight (Kelebihan berat badan)';
+                            categoryClass = 'result-overweight';
+                        } else {
+                            category = 'Obese (Obesitas)';
+                            categoryClass = 'result-obese';
+                        }
+                        
+                        resultHTML = `
+                            <h4>Hasil Perhitungan BMI:</h4>
+                            <div class="result-value">${bmi.toFixed(1)}</div>
+                            <div class="result-category ${categoryClass}">${category}</div>
+                            <p style="margin-top: 15px;">BMI (Body Mass Index) adalah indikator sederhana dari korespondensi antara berat dan tinggi badan.</p>
+                        `;
+                    } else {
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan berat dan tinggi badan yang valid.</p>';
+                    }
+                    break;
+                    
+                case 'heart':
+                    const age = parseInt(document.getElementById('age').value);
+                    const restingHeartRate = parseInt(document.getElementById('restingHeartRate').value);
+                    
+                    if (age && restingHeartRate) {
+                        const maxHeartRate = 220 - age;
+                        const targetHeartRateMin = Math.round((maxHeartRate - restingHeartRate) * 0.5 + restingHeartRate);
+                        const targetHeartRateMax = Math.round((maxHeartRate - restingHeartRate) * 0.85 + restingHeartRate);
+                        
+                        resultHTML = `
+                            <h4>Hasil Perhitungan Denyut Jantung:</h4>
+                            <p><strong>Denyut Jantung Maksimal:</strong> ${maxHeartRate} bpm</p>
+                            <p><strong>Zona Latihan Target:</strong> ${targetHeartRateMin} - ${targetHeartRateMax} bpm</p>
+                            <p style="margin-top: 15px;">Zona latihan target adalah rentang denyut jantung yang ideal untuk latihan kardio.</p>
+                        `;
+                    } else {
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan usia dan denyut jantung istirahat yang valid.</p>';
+                    }
+                    break;
+                    
+                case 'calorie':
+                    const calorieAge = parseInt(document.getElementById('calorieAge').value);
+                    const calorieWeight = parseFloat(document.getElementById('calorieWeight').value);
+                    const calorieHeight = parseFloat(document.getElementById('calorieHeight').value);
+                    const activityLevel = parseFloat(document.getElementById('activityLevel').value);
+                    
+                    if (calorieAge && calorieWeight && calorieHeight) {
+                        // Mifflin-St Jeor Equation
+                        const bmr = 10 * calorieWeight + 6.25 * calorieHeight - 5 * calorieAge + 5;
+                        const tdee = Math.round(bmr * activityLevel);
+                        
+                        resultHTML = `
+                            <h4>Hasil Perhitungan Kebutuhan Kalori:</h4>
+                            <p><strong>BMR (Basal Metabolic Rate):</strong> ${Math.round(bmr)} kalori/hari</p>
+                            <p><strong>TDEE (Total Daily Energy Expenditure):</strong> ${tdee} kalori/hari</p>
+                            <p style="margin-top: 15px;">BMR adalah jumlah kalori yang dibutuhkan tubuh untuk fungsi dasar, sedangkan TDEE termasuk aktivitas fisik.</p>
+                        `;
+                    } else {
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan semua data yang diperlukan.</p>';
+                    }
+                    break;
+                    
+                case 'water':
+                    const waterWeight = parseFloat(document.getElementById('waterWeight').value);
+                    const waterActivity = parseInt(document.getElementById('waterActivity').value);
+                    
+                    if (waterWeight) {
+                        const waterNeeded = Math.round(waterWeight * waterActivity / 1000);
+                        
+                        resultHTML = `
+                            <h4>Hasil Perhitungan Kebutuhan Cairan:</h4>
+                            <div class="result-value">${waterNeeded} Liter/hari</div>
+                            <p style="margin-top: 15px;">Kebutuhan cairan dapat bervariasi tergantung kondisi kesehatan, cuaca, dan aktivitas fisik.</p>
+                        `;
+                    } else {
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan berat badan yang valid.</p>';
+                    }
+                    break;
+                    
+                case 'calorie-burn':
+                    const activityType = parseInt(document.getElementById('activityType').value);
+                    const duration = parseInt(document.getElementById('duration').value);
+                    const burnWeight = parseFloat(document.getElementById('burnWeight').value);
+                    
+                    if (activityType && duration && burnWeight) {
+                        const caloriesBurned = Math.round(activityType * burnWeight * duration / 60);
+                        
+                        resultHTML = `
+                            <h4>Hasil Perhitungan Pembakaran Kalori:</h4>
+                            <div class="result-value">${caloriesBurned} kalori</div>
+                            <p style="margin-top: 15px;">Perhitungan ini adalah estimasi dan dapat bervariasi tergantung intensitas dan kondisi individu.</p>
+                        `;
+                    } else {
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan semua data yang diperlukan.</p>';
+                    }
+                    break;
+                    
+                case 'pregnancy':
+                    const lastPeriod = new Date(document.getElementById('lastPeriod').value);
+                    const cycleLength = parseInt(document.getElementById('cycleLength').value);
+                    
+                    if (lastPeriod && cycleLength) {
+                        const dueDate = new Date(lastPeriod);
+                        dueDate.setDate(dueDate.getDate() + 280 - (cycleLength - 28));
+                        
+                        const today = new Date();
+                        const weeksPregnant = Math.floor((today - lastPeriod) / (7 * 24 * 60 * 60 * 1000));
+                        
+                        resultHTML = `
+                            <h4>Hasil Perhitungan Kehamilan:</h4>
+                            <p><strong>Perkiraan Tanggal Persalinan:</strong> ${dueDate.toLocaleDateString('id-ID')}</p>
+                            <p><strong>Minggu Kehamilan Saat Ini:</strong> ${weeksPregnant} minggu</p>
+                            <p><strong>Trimester:</strong> ${weeksPregnant < 13 ? 'Pertama' : weeksPregnant < 27 ? 'Kedua' : 'Ketiga'}</p>
+                            <p style="margin-top: 15px;">Perhitungan ini berdasarkan siklus haid rata-rata. Konsultasikan dengan dokter untuk perhitungan yang lebih akurat.</p>
+                        `;
+                    } else {
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan tanggal haid terakhir yang valid.</p>';
+                    }
+                    break;
+            }
+            
+            calculatorResult.innerHTML = resultHTML;
+            calculatorResult.classList.add('active');
+        }
+
+        // ========== FUNGSI PERKEMBANGAN ANAK ==========
+        const checkDevBtn = document.getElementById('checkDev');
+        const devResult = document.getElementById('devResult');
+        const milestoneList = document.getElementById('milestoneList');
+
+        // Fungsi untuk mengecek perkembangan anak
+        function checkDevelopment() {
+            const childAge = parseInt(document.getElementById('childAge').value);
+            const childGender = document.getElementById('childGender').value;
+            
+            if (!childAge || childAge < 0 || childAge > 72) {
+                alert('Harap masukkan usia anak yang valid (0-72 bulan)');
+                return;
+            }
+            
+            // Data milestone berdasarkan usia
+            const milestones = getMilestonesByAge(childAge, childGender);
+            
+            // Tampilkan hasil
+            let milestoneHTML = '';
+            milestones.forEach(milestone => {
+                milestoneHTML += `
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        ${milestone}
+                    </li>
+                `;
+            });
+            
+            milestoneList.innerHTML = milestoneHTML;
+            devResult.classList.add('active');
+        }
+
+        // Fungsi untuk mendapatkan milestone berdasarkan usia
+        function getMilestonesByAge(age, gender) {
+            const milestones = [];
+            
+            if (age <= 3) {
+                milestones.push('Mengangkat kepala saat tengkurap');
+                milestones.push('Mengikuti objek dengan mata');
+                milestones.push('Merespons suara');
+            } else if (age <= 6) {
+                milestones.push('Berguling dari posisi tengkurap ke terlentang');
+                milestones.push('Menggapai dan memegang mainan');
+                milestones.push('Tersenyum dan tertawa');
+            } else if (age <= 9) {
+                milestones.push('Duduk tanpa bantuan');
+                milestones.push('Merangkak atau bergerak dengan perut');
+                milestones.push('Mengucapkan "mama" atau "papa"');
+            } else if (age <= 12) {
+                milestones.push('Berdiri dengan berpegangan');
+                milestones.push('Mengucapkan beberapa kata sederhana');
+                milestones.push('Memahami perintah sederhana');
+            } else if (age <= 18) {
+                milestones.push('Berjalan tanpa bantuan');
+                milestones.push('Mengucapkan 10-20 kata');
+                milestones.push('Menunjuk bagian tubuh');
+            } else if (age <= 24) {
+                milestones.push('Mengucapkan kalimat 2-3 kata');
+                milestones.push('Menyusun balok');
+                milestones.push('Mengikuti instruksi 2 langkah');
+            } else if (age <= 36) {
+                milestones.push('Mengucapkan kalimat 3-4 kata');
+                milestones.push('Menggunakan toilet dengan bantuan');
+                milestones.push('Bermain dengan anak lain');
+            } else if (age <= 48) {
+                milestones.push('Mengucapkan kalimat lengkap');
+                milestones.push('Menggambar bentuk sederhana');
+                milestones.push('Memahami konsep jumlah');
+            } else if (age <= 60) {
+                milestones.push('Mengucapkan kalimat kompleks');
+                milestones.push('Mengenali huruf dan angka');
+                milestones.push('Bermain dengan aturan sederhana');
+            } else {
+                milestones.push('Membaca kata-kata sederhana');
+                milestones.push('Menulis nama sendiri');
+                milestones.push('Memahami konsep waktu');
+            }
+            
+            // Tambahkan milestone khusus berdasarkan gender
+            if (gender === 'male' && age > 24) {
+                milestones.push('Koordinasi motorik kasar berkembang dengan baik');
+            } else if (gender === 'female' && age > 24) {
+                milestones.push('Keterampilan bahasa dan sosial berkembang dengan baik');
+            }
+            
+            return milestones;
+        }
+
+        // ========== FUNGSI MATERIAL POPUP ==========
+        function openMaterialDetail(type) {
+            const materialPopup = document.getElementById('materialPopup');
+            const materialTitle = document.getElementById('materialTitle');
+            const materialContent = document.getElementById('materialContent');
+            
+            let title = '';
+            let content = '';
+            
+            switch(type) {
+                case 'jantung':
+                    title = 'Penyakit Jantung - Pencegahan dan Penanganan';
+                    content = `
+                        <h4>Penyakit Jantung: Gejala, Pencegahan, dan Penanganan</h4>
+                        <p>Penyakit jantung merupakan salah satu penyebab kematian tertinggi di dunia. Berikut adalah informasi penting yang perlu diketahui:</p>
+                        
+                        <h5>Gejala Umum Penyakit Jantung:</h5>
+                        <ul>
+                            <li>Nyeri dada atau rasa tidak nyaman di dada</li>
+                            <li>Sesak napas</li>
+                            <li>Detak jantung tidak teraturan</li>
+                            <li>Kelelahan yang berlebihan</li>
+                            <li>Pembengkakan pada kaki dan pergelangan kaki</li>
+                        </ul>
+                        
+                        <h5>Faktor Risiko:</h5>
+                        <ul>
+                            <li>Tekanan darah tinggi</li>
+                            <li>Kolesterol tinggi</li>
+                            <li>Diabetes</li>
+                            <li>Obesitas</li>
+                            <li>Merokok</li>
+                            <li>Riwayat keluarga dengan penyakit jantung</li>
+                        </ul>
+                        
+                        <h5>Pencegahan:</h5>
+                        <ul>
+                            <li>Pola makan sehat dan seimbang</li>
+                            <li>Olahraga teratur</li>
+                            <li>Menjaga berat badan ideal</li>
+                            <li>Tidak merokok</li>
+                            <li>Mengelola stres</li>
+                            <li>Pemeriksaan kesehatan rutin</li>
+                        </ul>
+                        
+                        <p style="margin-top: 15px; font-style: italic;">Jika mengalami gejala yang mencurigakan, segera konsultasikan dengan dokter untuk pemeriksaan lebih lanjut.</p>
+                    `;
+                    break;
+                case 'mental':
+                    title = 'Kesehatan Mental - Pentingnya dan Cara Mengelola';
+                    content = `
+                        <h4>Kesehatan Mental: Menjaga Keseimbangan Emosional dan Psikologis</h4>
+                        <p>Kesehatan mental sama pentingnya dengan kesehatan fisik. Berikut adalah panduan untuk menjaga kesehatan mental:</p>
+                        
+                        <h5>Tanda-tanda Gangguan Kesehatan Mental:</h5>
+                        <ul>
+                            <li>Perubahan mood yang ekstrem</li>
+                            <li>Kesulitan berkonsentrasi</li>
+                            <li>Perubahan pola tidur dan makan</li>
+                            <li>Menarik diri dari aktivitas sosial</li>
+                            <li>Perasaan putus asa atau tidak berharga</li>
+                        </ul>
+                        
+                        <h5>Strategi Mengelola Stres:</h5>
+                        <ul>
+                            <li>Teknik relaksasi (pernapasan dalam, meditasi)</li>
+                            <li>Olahraga teratur</li>
+                            <li>Menjaga hubungan sosial yang sehat</li>
+                            <li>Manajemen waktu yang baik</li>
+                            <li>Hobi dan aktivitas yang menyenangkan</li>
+                        </ul>
+                        
+                        <h5>Kapan Mencari Bantuan Profesional:</h5>
+                        <ul>
+                            <li>Gejala berlangsung lebih dari 2 minggu</li>
+                            <li>Mengganggu aktivitas sehari-hari</li>
+                            <li>Memiliki pikiran untuk menyakiti diri sendiri atau orang lain</li>
+                            <li>Kesulitan mengatasi masalah sendiri</li>
+                        </ul>
+                        
+                        <p style="margin-top: 15px; font-style: italic;">Ingat, mencari bantuan untuk kesehatan mental adalah tanda kekuatan, bukan kelemahan.</p>
+                    `;
+                    break;
+                case 'gizi':
+                    title = 'Gizi Seimbang - Panduan Pola Makan Sehat';
+                    content = `
+                        <h4>Gizi Seimbang: Fondasi Kesehatan Optimal</h4>
+                        <p>Pola makan yang seimbang adalah kunci untuk menjaga kesehatan dan mencegah penyakit. Berikut panduan gizi seimbang:</p>
+                        
+                        <h5>Prinsip Gizi Seimbang:</h5>
+                        <ul>
+                            <li>Konsumsi berbagai jenis makanan</li>
+                            <li>Perbanyak sayuran dan buah-buahan</li>
+                            <li>Pilih sumber karbohidrat kompleks</li>
+                            <li>Konsumsi protein berkualitas</li>
+                            <li>Batasi gula, garam, dan lemak jenuh</li>
+                            <li>Minum air yang cukup</li>
+                        </ul>
+                        
+                        <h5>Piring Makan Sehat:</h5>
+                        <ul>
+                            <li>1/2 piring: Sayuran dan buah-buahan</li>
+                            <li>1/4 piring: Protein (ikan, ayam, kacang-kacangan)</li>
+                            <li>1/4 piring: Karbohidrat (nasi, roti gandum, kentang)</li>
+                        </ul>
+                        
+                        <h5>Tips Praktis:</h5>
+                        <ul>
+                            <li>Makan teratur 3 kali sehari</li>
+                            <li>Porsi sesuai kebutuhan</li>
+                            <li>Proses memasak yang sehat (kukus, rebus, panggang)</li>
+                            <li>Baca label makanan</li>
+                            <li>Hindari makanan olahan berlebihan</li>
+                        </ul>
+                        
+                        <p style="margin-top: 15px; font-style: italic;">Gizi seimbang disesuaikan dengan usia, jenis kelamin, aktivitas, dan kondisi kesehatan masing-masing individu.</p>
+                    `;
+                    break;
+            }
+            
+            materialTitle.textContent = title;
+            materialContent.innerHTML = content;
+            materialPopup.classList.add('active');
+        }
+
+        function closeMaterialPopup() {
+            document.getElementById('materialPopup').classList.remove('active');
+        }
+
+        // ========== FUNGSI EMERGENCY POPUP ==========
+        function openEmergencyPopup(type) {
+            const emergencyPopup = document.getElementById('emergencyPopup');
+            const emergencyTitle = document.getElementById('emergencyTitle');
+            const emergencyContent = document.getElementById('emergencyContent');
+            const emergencyCallBtn = document.getElementById('emergencyCallBtn');
+            
+            let title = '';
+            let content = '';
+            let phoneNumber = '';
+            
+            switch(type) {
+                case 'ambulans':
+                    title = 'Ambulans Darurat';
+                    phoneNumber = '118';
+                    content = `
+                        <p>Layanan ambulans darurat 24 jam untuk keadaan gawat darurat.</p>
+                        <div class="emergency-number" style="text-align: center; font-size: 2rem; margin: 20px 0;">${phoneNumber}</div>
+                        <p><strong>Kapan menghubungi ambulans:</strong></p>
+                        <ul>
+                            <li>Serangan jantung atau stroke</li>
+                            <li>Kecelakaan serius</li>
+                            <li>Kesulitan bernapas parah</li>
+                            <li>Pendarahan hebat</li>
+                            <li>Kehilangan kesadaran</li>
+                        </ul>
+                    `;
+                    break;
+                case 'kemenkes':
+                    title = 'Hotline Kemenkes';
+                    phoneNumber = '1500-567';
+                    content = `
+                        <p>Hotline Kementerian Kesehatan RI untuk informasi dan bantuan kesehatan.</p>
+                        <div class="emergency-number" style="text-align: center; font-size: 2rem; margin: 20px 0;">${phoneNumber}</div>
+                        <p><strong>Layanan yang tersedia:</strong></p>
+                        <ul>
+                            <li>Informasi layanan kesehatan</li>
+                            <li>Konsultasi kesehatan umum</li>
+                            <li>Pengaduan pelayanan kesehatan</li>
+                            <li>Informasi program pemerintah</li>
+                            <li>Bantuan darurat non-medis</li>
+                        </ul>
+                    `;
+                    break;
+                case 'keracunan':
+                    title = 'Pusat Informasi Keracunan';
+                    phoneNumber = '(021) 425-0767';
+                    content = `
+                        <p>Pusat informasi dan penanganan keracunan untuk keadaan darurat.</p>
+                        <div class="emergency-number" style="text-align: center; font-size: 2rem; margin: 20px 0;">${phoneNumber}</div>
+                        <p><strong>Yang harus dilakukan sebelum menghubungi:</strong></p>
+                        <ul>
+                            <li>Identifikasi zat yang tertelan</li>
+                            <li>Perkirakan jumlah yang tertelan</li>
+                            <li>Catat waktu kejadian</li>
+                            <li>Siapkan informasi usia dan berat badan korban</li>
+                            <li>Jangan berikan apapun melalui mulut kecuali diinstruksikan</li>
+                        </ul>
+                    `;
+                    break;
+                case 'konsultasi':
+                    title = 'Konsultasi Darurat';
+                    phoneNumber = '0800-100-1234';
+                    content = `
+                        <p>Layanan konsultasi medis darurat via telepon dengan tenaga medis profesional.</p>
+                        <div class="emergency-number" style="text-align: center; font-size: 2rem; margin: 20px 0;">${phoneNumber}</div>
+                        <p><strong>Kondisi yang dapat dikonsultasikan:</strong></p>
+                        <ul>
+                            <li>Gejala penyakit yang mengkhawatirkan</li>
+                            <li>Pertolongan pertama</li>
+                            <li>Konsultasi obat-obatan</li>
+                            <li>Nasihat sebelum ke rumah sakit</li>
+                            <li>Informasi fasilitas kesehatan terdekat</li>
+                        </ul>
+                    `;
+                    break;
+            }
+            
+            emergencyTitle.textContent = title;
+            emergencyContent.innerHTML = content;
+            emergencyCallBtn.onclick = function() {
+                alert(`Menghubungi ${title} di nomor ${phoneNumber}`);
+                // Dalam implementasi nyata, ini akan membuka dialer telepon
+                // window.location.href = `tel:${phoneNumber}`;
+            };
+            emergencyPopup.classList.add('active');
+        }
+
+        function closeEmergencyPopup() {
+            document.getElementById('emergencyPopup').classList.remove('active');
+        }
+
+        // ========== EVENT LISTENERS ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDarkMode();
+            
+            // Navigation
+            hamburgerMenu.addEventListener('click', toggleMobileMenu);
+            navOverlay.addEventListener('click', closeMobileMenu);
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            // Dark Mode
+            themeToggle.addEventListener('change', toggleDarkMode);
+
+            // Inisialisasi peta fasilitas kesehatan
+            initializeHealthcareMap();
+
+            // Scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = "1";
+                        entry.target.style.transform = "translateY(0)";
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = "0";
+                card.style.transform = "translateY(20px)";
+                card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+                observer.observe(card);
+            });
+
+            // Kalkulator
+            calculatorBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const calculatorType = this.getAttribute('data-calculator');
+                    openCalculator(calculatorType);
+                });
+            });
+
+            popupClose.addEventListener('click', closeCalculatorPopup);
+            resetCalculator.addEventListener('click', function() {
+                calculatorForm.reset();
+                calculatorResult.classList.remove('active');
+            });
+            calculateBtn.addEventListener('click', calculate);
+
+            // Perkembangan Anak
+            checkDevBtn.addEventListener('click', checkDevelopment);
+
+            // Healthcare Finder
+            document.getElementById('applyFilters').addEventListener('click', applyHealthcareFilters);
+        });
+    </script>
+
+    <!-- i-Doc Chatbot Script -->
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+        createChat({
+            webhookUrl: 'https://agung121.app.n8n.cloud/webhook/b4fc0e28-60e3-4a1b-94f6-5f8328d04de2/chat',
+            webhookConfig: {
+                method: 'POST',
+                headers: {}
+            },
+            target: '#n8n-chat',
+            mode: 'window', // bisa diubah ke 'fullscreen' kalau mau layar penuh
+            chatInputKey: 'chatInput',
+            chatSessionKey: 'sessionId',
+            loadPreviousSession: true,
+            metadata: {},
+            showWelcomeScreen: false,
+            defaultLanguage: 'en',
+            initialMessages: [
+                'Hi Sobat!',
+                'Halo! Saya i-Doc, asisten kesehatan AI Anda. Ada yang bisa saya bantu hari ini?'
+            ],
+            i18n: {
+                en: {
+                    title: '🤖I-doc',
+                    subtitle: 'Mulai berbincang dengan asistenmu!',
+                    footer: '',
+                    getStarted: 'New Conversation',
+                    inputPlaceholder: 'Ketik pertanyaanmu di sini...',
+                },
+            },
+            enableStreaming: false,
+        });
+    </script>
+</body>
+</html>

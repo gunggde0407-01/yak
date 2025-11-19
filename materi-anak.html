@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Kesehatan untuk Anak Anak-anak - Asistenku</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIABLES & RESET ===== */
+        :root {
+            --primary: #3498DB;
+            --primary-dark: #2980B9;
+            --secondary: #27AE60;
+            --secondary-dark: #219653;
+            --accent: #E67E22;
+            --warning: #F39C12;
+            --error: #E74C3C;
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --light-gray: #F1F5F9;
+            --gray: #64748B;
+            --dark: #1E293B;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+        }
+
+        .dark-mode {
+            --light-bg: #1E293B;
+            --white: #2D3748;
+            --light-gray: #374151;
+            --gray: #CBD5E0;
+            --dark: #F7FAFC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light-bg);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--gray);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .float-animation {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        /* ===== HEADER & NAVIGATION ===== */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode header {
+            background-color: rgba(45, 55, 72, 0.95);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(15deg);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== HERO SECTION Anak-anak ===== */
+        .hero-sd {
+            background: linear-gradient(135deg, var(--light-bg) 0%, #E6F7FF 100%);
+            padding: 150px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .hero-sd {
+            background: linear-gradient(135deg, var(--light-bg) 0%, #1a365d 100%);
+        }
+
+        .hero-sd::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(52,152,219,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content-sd {
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-sd h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.2;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .hero-sd p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--gray);
+            max-width: 500px;
+        }
+
+        .hero-buttons-sd {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .hero-visual-sd {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Gambar anak belajar dengan sudut yang tidak lancip */
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 20px;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-image-placeholder-sd {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* ===== FILTER SECTION ===== */
+        .filter-section {
+            background-color: var(--white);
+            padding: 40px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--light-bg);
+            color: var(--dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gradient);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ===== PROGRESS SECTION ===== */
+        .progress-section {
+            background: linear-gradient(135deg, #F0F9FF 0%, var(--light-bg) 100%);
+            padding: 60px 0;
+        }
+
+        .dark-mode .progress-section {
+            background: linear-gradient(135deg, #1a365d 0%, var(--light-bg) 100%);
+        }
+
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 600px;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dark-mode .progress-bar {
+            background-color: #4a5568;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-text {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        /* ===== MATERIALS SECTION ===== */
+        .materials-section {
+            background-color: var(--white);
+            padding: 80px 0;
+        }
+
+        .dark-mode .materials-section {
+            background-color: var(--light-bg);
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .material-card-sd {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .material-card-sd:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .material-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 3rem;
+        }
+
+        .material-content {
+            padding: 20px;
+        }
+
+        .material-category {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .material-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .material-description {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .material-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .material-duration {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .completion-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .completion-badge {
+            background-color: #4a5568;
+        }
+
+        .completed {
+            background-color: var(--secondary);
+        }
+
+        /* ===== DETAIL MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(50px);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--error);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-category {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 4rem;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-section h4 i {
+            color: var(--primary);
+        }
+
+        .modal-section p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .modal-list {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .modal-list li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .modal-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ===== QUIZ SECTION ===== */
+        .quiz-section {
+            background: linear-gradient(135deg, #F0F9FF 0%, var(--light-bg) 100%);
+            padding: 80px 0;
+        }
+
+        .dark-mode .quiz-section {
+            background: linear-gradient(135deg, #1a365d 0%, var(--light-bg) 100%);
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .dark-mode .quiz-option {
+            border-color: #4a5568;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .dark-mode .quiz-option:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .quiz-result.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--gray);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .dark-mode footer {
+            background-color: #0f172a;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #BDC3C7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #BDC3C7;
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) {
+            .hero-visual-sd {
+                display: none;
+            }
+            
+            .hero-sd {
+                text-align: center;
+                padding: 150px 0 80px;
+            }
+            
+            .hero-content-sd {
+                margin: 0 auto;
+            }
+            
+            .hero-buttons-sd {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .dark-mode .nav-links {
+                background-color: var(--white);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-sd h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-sd {
+                padding: 130px 0 60px;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .hero-buttons-sd {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="logo-text">Asistenku</div>
+                </a>
+                
+                <ul class="nav-links">
+                    <!-- Hanya menyisakan tombol Kembali dan mode gelap/terang -->
+                    <li><a href="index.html#education" class="btn btn-outline btn-small">Kembali</a></li>
+                    <li>
+                        <button class="theme-toggle" id="themeToggle">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section Anak-anak -->
+    <section class="hero-sd">
+        <div class="container">
+            <div class="hero-content-sd">
+                <h1 class="fade-in-up">Belajar Kesehatan Seru untuk Anak!</h1>
+                <p class="fade-in-up">Mari belajar menjaga kesehatan dengan cara yang menyenangkan melalui gambar, cerita, dan permainan interaktif.</p>
+                
+                <div class="hero-buttons-sd fade-in-up">
+                    <a href="#materials" class="btn btn-primary">Mulai Belajar</a>
+                    <a href="#quiz" class="btn btn-outline">Coba Kuis</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual-sd">
+                <!-- Gambar anak belajar kesehatan dengan sudut yang tidak lancip -->
+                <div class="hero-image-placeholder-sd">
+                    <img src="anaksdbelajar.png" alt="Anak Anak-anak Belajar Kesehatan" class="hero-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Section -->
+    <section class="progress-section">
+        <div class="container">
+            <div class="progress-container">
+                <h2 class="progress-title">Progress Pembelajaran Kamu</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">0% selesai</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="hygiene">Kebersihan</button>
+                <button class="filter-btn" data-filter="nutrition">Gizi</button>
+                <button class="filter-btn" data-filter="exercise">Olahraga</button>
+                <button class="filter-btn" data-filter="safety">Keselamatan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Materials Section -->
+    <section id="materials" class="materials-section">
+        <div class="container">
+            <h2 class="section-title">Materi Pembelajaran</h2>
+            <p class="section-subtitle">Pilih materi yang ingin kamu pelajari. Setelah selesai, tandai sebagai selesai untuk menambah progress!</p>
+            
+            <div class="materials-grid">
+                <!-- Material 1 -->
+                <div class="material-card-sd" data-category="hygiene" data-material="1">
+                    <div class="material-image">
+                        <img src="anaksdcucitangan.png" alt="Anak Anak-anak Mencuci Tangan" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="material-content">
+                        <span class="material-category">Kebersihan</span>
+                        <h3 class="material-title">Cara Mencuci Tangan yang Benar</h3>
+                        <p class="material-description">Belajar 7 langkah mencuci tangan dengan benar untuk mencegah penyakit.</p>
+                        <div class="material-footer">
+                            <div class="material-duration">
+                                <i class="far fa-clock"></i>
+                                <span>5 menit</span>
+                            </div>
+                            <div class="completion-badge" data-material="1">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Material 2 -->
+                <div class="material-card-sd" data-category="nutrition" data-material="2">
+                    <div class="material-image">
+                        <img src="anaksdmakan.png" alt="Anak Anak-anak Makan Sehat" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="material-content">
+                        <span class="material-category">Gizi</span>
+                        <h3 class="material-title">Makanan Sehat 4 Sehat 5 Sempurna</h3>
+                        <p class="material-description">Kenali berbagai jenis makanan sehat yang dibutuhkan tubuh untuk tumbuh kuat.</p>
+                        <div class="material-footer">
+                            <div class="material-duration">
+                                <i class="far fa-clock"></i>
+                                <span>7 menit</span>
+                            </div>
+                            <div class="completion-badge" data-material="2">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Material 3 -->
+                <div class="material-card-sd" data-category="exercise" data-material="3">
+                    <div class="material-image">
+                        <img src="anaksdolahraga.png" alt="Anak Anak-anak Berolahraga" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="material-content">
+                        <span class="material-category">Olahraga</span>
+                        <h3 class="material-title">Olahraga Menyenangkan untuk Anak</h3>
+                        <p class="material-description">Temukan berbagai jenis olahraga yang menyenangkan dan baik untuk kesehatan.</p>
+                        <div class="material-footer">
+                            <div class="material-duration">
+                                <i class="far fa-clock"></i>
+                                <span>6 menit</span>
+                            </div>
+                            <div class="completion-badge" data-material="3">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Material 4 -->
+                <div class="material-card-sd" data-category="safety" data-material="4">
+                    <div class="material-image">
+                        <img src="anaksdmainsamaortu.png" alt="Anak Anak-anak Bermain dengan Orang Tua" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="material-content">
+                        <span class="material-category">Keselamatan</span>
+                        <h3 class="material-title">Keselamatan di Rumah dan Sekolah</h3>
+                        <p class="material-description">Pelajari cara menjaga keselamatan diri di rumah, sekolah, dan lingkungan.</p>
+                        <div class="material-footer">
+                            <div class="material-duration">
+                                <i class="far fa-clock"></i>
+                                <span>8 menit</span>
+                            </div>
+                            <div class="completion-badge" data-material="4">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Material 5 -->
+                <div class="material-card-sd" data-category="hygiene" data-material="5">
+                    <div class="material-image">
+                        <img src="anaksdgosokgigi.png" alt="Anak Anak-anak Menggosok Gigi" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="material-content">
+                        <span class="material-category">Kebersihan</span>
+                        <h3 class="material-title">Merawat Gigi dan Mulut</h3>
+                        <p class="material-description">Cara menyikat gigi yang benar dan menjaga kesehatan mulut.</p>
+                        <div class="material-footer">
+                            <div class="material-duration">
+                                <i class="far fa-clock"></i>
+                                <span>5 menit</span>
+                            </div>
+                            <div class="completion-badge" data-material="5">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Material 6 -->
+                <div class="material-card-sd" data-category="nutrition" data-material="6">
+                    <div class="material-image">
+                        <img src="sayuran.png" alt="Sayuran Sehat" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="material-content">
+                        <span class="material-category">Gizi</span>
+                        <h3 class="material-title">Manfaat Buah dan Sayuran</h3>
+                        <p class="material-description">Kenali berbagai jenis buah dan sayuran serta manfaatnya untuk tubuh.</p>
+                        <div class="material-footer">
+                            <div class="material-duration">
+                                <i class="far fa-clock"></i>
+                                <span>6 menit</span>
+                            </div>
+                            <div class="completion-badge" data-material="6">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="materialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Judul Materi</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Konten akan diisi oleh JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <div class="material-duration">
+                    <i class="far fa-clock"></i>
+                    <span id="modalDuration">5 menit</span>
+                </div>
+                <button class="btn btn-primary" id="markComplete">
+                    <i class="fas fa-check"></i> Tandai Selesai
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="quiz-section">
+        <div class="container">
+            <h2 class="section-title">Kuis Kesehatan</h2>
+            <p class="section-subtitle">Uji pengetahuan kesehatanmu dengan kuis menyenangkan ini!</p>
+            
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <h3>Kuis Kesehatan Anak</h3>
+                    <p>Jawab 5 pertanyaan untuk menguji pengetahuanmu</p>
+                </div>
+                
+                <div class="quiz-progress">
+                    <span>Pertanyaan <span id="currentQuestion">1</span>/5</span>
+                    <span id="quizScore">Skor: 0</span>
+                </div>
+                
+                <div class="quiz-content" id="quizContent">
+                    <div class="quiz-question" id="quizQuestion">
+                        Memuat pertanyaan...
+                    </div>
+                    
+                    <div class="quiz-options" id="quizOptions">
+                        <!-- Opsi akan diisi oleh JavaScript -->
+                    </div>
+                    
+                    <div class="quiz-navigation">
+                        <button class="btn btn-outline" id="prevQuestion" disabled>Sebelumnya</button>
+                        <button class="btn btn-primary" id="nextQuestion">Selanjutnya</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-result" id="quizResult">
+                    <div class="result-score" id="finalScore">0/5</div>
+                    <h3 id="resultTitle">Hasil Kuis</h3>
+                    <p class="result-message" id="resultMessage"></p>
+                    <button class="btn btn-primary" id="restartQuiz">Coba Lagi</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Asistenku</h3>
+                    <p>Platform kesehatan digital untuk keluarga Indonesia.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Layanan</h3>
+                    <ul class="footer-links">
+                        <li><a href="pembelajaran.html">Pembelajaran</a></li>
+                        <li><a href="#">Konsultasi Dokter</a></li>
+                        <li><a href="#">Kalkulator Kesehatan</a></li>
+                        <li><a href="#">Perkembangan Anak</a></li>
+                        <li><a href="#">Darurat</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Bantuan</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Kontak Kami</a></li>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Asistenku. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data materi pembelajaran
+        const materialsData = {
+            1: {
+                title: "Cara Mencuci Tangan yang Benar",
+                category: "hygiene",
+                duration: "5 menit",
+                icon: "fas fa-hands-wash",
+                image: "anaksdcucitangan.png",
+                content: `
+                    <div class="modal-image">
+                        <img src="anaksdcucitangan.png" alt="Anak Anak-anak Mencuci Tangan" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <span class="modal-category">Kebersihan</span>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-info-circle"></i> Mengapa Penting Mencuci Tangan?</h4>
+                        <p>Mencuci tangan adalah cara terbaik untuk mencegah penyebaran kuman dan penyakit. Tangan kita menyentuh banyak benda yang mungkin mengandung kuman berbahaya.</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-list-ol"></i> 7 Langkah Mencuci Tangan yang Benar</h4>
+                        <ul class="modal-list">
+                            <li>Basahi tangan dengan air mengalir</li>
+                            <li>Gunakan sabun secukupnya</li>
+                            <li>Gosok telapak tangan</li>
+                            <li>Gosok punggung tangan</li>
+                            <li>Gosok sela-sela jari</li>
+                            <li>Bersihkan ujung jari</li>
+                            <li>Bilas dengan air bersih dan keringkan</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-clock"></i> Kapan Harus Mencuci Tangan?</h4>
+                        <ul class="modal-list">
+                            <li>Sebelum makan</li>
+                            <li>Setelah dari toilet</li>
+                            <li>Setelah bermain di luar</li>
+                            <li>Setelah memegang hewan</li>
+                            <li>Setelah batuk atau bersin</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-lightbulb"></i> Tips Tambahan</h4>
+                        <p>Gunakan sabun yang bersih dan air mengalir. Cuci tangan selama minimal 20 detik - sama dengan menyanyikan lagu "Selamat Ulang Tahun" dua kali!</p>
+                    </div>
+                `
+            },
+            2: {
+                title: "Makanan Sehat 4 Sehat 5 Sempurna",
+                category: "nutrition",
+                duration: "7 menit",
+                icon: "fas fa-utensils",
+                image: "anaksdmakan.png",
+                content: `
+                    <div class="modal-image">
+                        <img src="anaksdmakan.png" alt="Anak Anak-anak Makan Sehat" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <span class="modal-category">Gizi</span>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-apple-alt"></i> Apa itu 4 Sehat 5 Sempurna?</h4>
+                        <p>4 Sehat 5 Sempurna adalah pola makan yang terdiri dari makanan pokok, lauk pauk, sayuran, buah-buahan, dan disempurnakan dengan susu.</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-utensils"></i> Komponen 4 Sehat 5 Sempurna</h4>
+                        <ul class="modal-list">
+                            <li><strong>Makanan Pokok:</strong> Nasi, roti, kentang, jagung, sagu</li>
+                            <li><strong>Lauk Pauk:</strong> Ikan, ayam, telur, tahu, tempe, daging</li>
+                            <li><strong>Sayuran:</strong> Bayam, wortel, brokoli, kangkung, sawi</li>
+                            <li><strong>Buah-buahan:</strong> Apel, pisang, jeruk, mangga, pepaya</li>
+                            <li><strong>Susu:</strong> Menyempurnakan kebutuhan gizi dan tulang</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-heart"></i> Manfaat Makan Sehat</h4>
+                        <ul class="modal-list">
+                            <li>Tubuh menjadi kuat dan sehat</li>
+                            <li>Tumbuh dengan optimal sesuai usia</li>
+                            <li>Tidak mudah sakit</li>
+                            <li>Energi untuk belajar dan bermain</li>
+                            <li>Otak menjadi cerdas dan fokus</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-glass-whiskey"></i> Pentingnya Minum Air Putih</h4>
+                        <p>Minum 8 gelas air putih setiap hari membantu tubuh tetap segar dan sehat. Air putih membantu pencernaan dan membuat kulit tetap sehat.</p>
+                    </div>
+                `
+            },
+            3: {
+                title: "Olahraga Menyenangkan untuk Anak",
+                category: "exercise",
+                duration: "6 menit",
+                icon: "fas fa-running",
+                image: "anaksdolahraga.png",
+                content: `
+                    <div class="modal-image">
+                        <img src="anaksdolahraga.png" alt="Anak Anak-anak Berolahraga" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <span class="modal-category">Olahraga</span>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-running"></i> Mengapa Olahraga Penting?</h4>
+                        <p>Olahraga membantu tubuh tumbuh kuat, menjaga kesehatan jantung, dan membuat kita merasa bahagia! Olahraga juga membantu kita tidur lebih nyenyak.</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-gamepad"></i> Jenis Olahraga Menyenangkan</h4>
+                        <ul class="modal-list">
+                            <li><strong>Bersepeda:</strong> Melatih keseimbangan dan kekuatan kaki</li>
+                            <li><strong>Berenang:</strong> Melatih semua otot tubuh dan pernapasan</li>
+                            <li><strong>Lompat Tali:</strong> Melatih ketangkasan dan koordinasi</li>
+                            <li><strong>Bermain Bola:</strong> Melatih kerja sama tim dan strategi</li>
+                            <li><strong>Senam:</strong> Melatih kelenturan tubuh dan ritme</li>
+                            <li><strong>Bermain Layangan:</strong> Melatih kesabaran dan mengamati angin</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-clock"></i> Berapa Lama Sebaiknya Berolahraga?</h4>
+                        <p>Anak-anak sebaiknya berolahraga minimal 1 jam setiap hari. Bisa dibagi menjadi beberapa waktu, misalnya 30 menit pagi dan 30 menit sore.</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-sun"></i> Tips Berolahraga yang Aman</h4>
+                        <ul class="modal-list">
+                            <li>Pakai pakaian yang nyaman dan sesuai cuaca</li>
+                            <li>Minum air putih sebelum dan sesudah olahraga</li>
+                            <li>Lakukan pemanasan sebelum mulai</li>
+                            <li>Jangan memaksakan diri jika lelah</li>
+                            <li>Gunakan alat pelindung jika diperlukan (helm, pelindung lutut)</li>
+                        </ul>
+                    </div>
+                `
+            },
+            4: {
+                title: "Keselamatan di Rumah dan Sekolah",
+                category: "safety",
+                duration: "8 menit",
+                icon: "fas fa-home",
+                image: "anaksdmainsamaortu.png",
+                content: `
+                    <div class="modal-image">
+                        <img src="anaksdmainsamaortu.png" alt="Anak Anak-anak Bermain dengan Orang Tua" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <span class="modal-category">Keselamatan</span>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-home"></i> Keselamatan di Rumah</h4>
+                        <ul class="modal-list">
+                            <li>Jangan bermain di dekat kompor atau listrik</li>
+                            <li>Hati-hati saat naik turun tangga, pegang pegangan</li>
+                            <li>Jangan bermain dengan obat-obatan atau bahan kimia</li>
+                            <li>Minta bantuan orang dewasa untuk mengambil barang tinggi</li>
+                            <li>Jangan berlari di lantai yang licin atau basah</li>
+                            <li>Simpan mainan di tempatnya agar tidak terpeleset</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-school"></i> Keselamatan di Sekolah</h4>
+                        <ul class="modal-list">
+                            <li>Jangan berlari di koridor sekolah atau dekat tangga</li>
+                            <li>Gunakan tangga dengan hati-hati, jangan didorong-dorong</li>
+                            <li>Jangan mendorong teman saat bermain</li>
+                            <li>Simpan tas di tempat yang aman, tidak menghalangi jalan</li>
+                            <li>Laporkan kepada guru jika ada yang tidak beres atau teman sakit</li>
+                            <li>Ikuti peraturan sekolah dengan tertib</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-phone"></i> Apa yang Harus Dilakukan Saat Darurat?</h4>
+                        <ul class="modal-list">
+                            <li>Segera cari bantuan orang dewasa (guru/orang tua)</li>
+                            <li>Hafalkan nomor telepon orang tua dan alamat rumah</li>
+                            <li>Ketahui lokasi pintu darurat di sekolah dan rumah</li>
+                            <li>Jangan panik, tetap tenang dan ikuti instruksi</li>
+                            <li>Jika terjadi kebakaran, segera keluar dan jangan mengambil barang</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-user-shield"></i> Keselamatan dengan Orang Asing</h4>
+                        <p>Jangan menerima makanan, minuman, atau ajakan dari orang yang tidak dikenal. Selalu beritahu orang tua atau guru jika ada orang asing yang mendekati.</p>
+                    </div>
+                `
+            },
+            5: {
+                title: "Merawat Gigi dan Mulut",
+                category: "hygiene",
+                duration: "5 menit",
+                icon: "fas fa-tooth",
+                image: "anaksdgosokgigi.png",
+                content: `
+                    <div class="modal-image">
+                        <img src="anaksdgosokgigi.png" alt="Anak Anak-anak Menggosok Gigi" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <span class="modal-category">Kebersihan</span>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-tooth"></i> Mengapa Merawat Gigi Penting?</h4>
+                        <p>Merawat gigi membantu mencegah gigi berlubang, bau mulut, dan menjaga senyum yang indah! Gigi yang sehat juga membantu kita mengunyah makanan dengan baik.</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-brush"></i> Cara Menyikat Gigi yang Benar</h4>
+                        <ul class="modal-list">
+                            <li>Sikat gigi 2 kali sehari (setelah sarapan dan sebelum tidur)</li>
+                            <li>Gunakan pasta gigi sebesar biji jagung</li>
+                            <li>Sikat selama 2 menit (gunakan timer atau nyanyikan lagu)</li>
+                            <li>Sikat semua permukaan gigi (depan, belakang, atas)</li>
+                            <li>Jangan lupa sikat lidah untuk menghilangkan bakteri</li>
+                            <li>Bilas mulut dengan air bersih setelah menyikat</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-candy-cane"></i> Makanan yang Baik untuk Gigi</h4>
+                        <ul class="modal-list">
+                            <li>Buah dan sayuran segar (apel, wortel, seledri)</li>
+                            <li>Susu dan produk olahannya (keju, yogurt)</li>
+                            <li>Air putih untuk membersihkan mulut</li>
+                            <li>Makanan rendah gula dan tepung</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-stethoscope"></i> Kapan Harus ke Dokter Gigi?</h4>
+                        <p>Kunjungi dokter gigi setiap 6 bulan sekali untuk pemeriksaan rutin. Segera pergi ke dokter gigi jika gigi terasa sakit, berlubang, atau gusi berdarah.</p>
+                    </div>
+                `
+            },
+            6: {
+                title: "Manfaat Buah dan Sayuran",
+                category: "nutrition",
+                duration: "6 menit",
+                icon: "fas fa-apple-alt",
+                image: "sayuran.png",
+                content: `
+                    <div class="modal-image">
+                        <img src="sayuran.png" alt="Sayuran Sehat" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <span class="modal-category">Gizi</span>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-carrot"></i> Mengapa Harus Makan Buah dan Sayur?</h4>
+                        <p>Buah dan sayuran mengandung vitamin, mineral, dan serat yang penting untuk pertumbuhan dan kesehatan tubuh. Mereka juga membantu mencegah penyakit.</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-apple-alt"></i> Jenis Buah dan Manfaatnya</h4>
+                        <ul class="modal-list">
+                            <li><strong>Apel:</strong> Baik untuk pencernaan dan gigi</li>
+                            <li><strong>Pisang:</strong> Sumber energi dan potassium</li>
+                            <li><strong>Jeruk:</strong> Kaya vitamin C untuk daya tahan tubuh</li>
+                            <li><strong>Wortel:</strong> Baik untuk mata dan kulit</li>
+                            <li><strong>Bayam:</strong> Membuat tubuh kuat dan darah sehat</li>
+                            <li><strong>Brokoli:</strong> Melawan penyakit dan baik untuk tulang</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-utensils"></i> Tips Makan Buah dan Sayur</h4>
+                        <ul class="modal-list">
+                            <li>Makan berbagai macam warna buah dan sayur setiap hari</li>
+                            <li>Cuci bersih sebelum dimakan atau dimasak</li>
+                            <li>Makan buah sebagai camilan sehat pengganti permen</li>
+                            <li>Tambahkan sayur dalam setiap makanan utama</li>
+                            <li>Coba buah dan sayur baru setiap minggu</li>
+                            <li>Buat jus atau smoothie dari buah dan sayur segar</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h4><i class="fas fa-seedling"></i> Menanam Kebun Kecil</h4>
+                        <p>Coba menanam sayuran sederhana di rumah seperti kangkung, sawi, atau tomat. Menanam sendiri membuat kita lebih menghargai makanan dan lingkungan.</p>
+                    </div>
+                `
+            }
+        };
+
+        // Data kuis yang sudah diacak
+        const quizQuestions = [
+            {
+                question: "Berapa kali seharusnya kita mencuci tangan dalam sehari?",
+                options: [
+                    "Hanya sebelum makan",
+                    "Setelah bermain, sebelum makan, dan setelah dari toilet",
+                    "Hanya jika tangan terlihat kotor",
+                    "Sekali sehari sudah cukup"
+                ],
+                correct: 1
+            },
+            {
+                question: "Makanan apa yang termasuk dalam kelompok 4 sehat 5 sempurna?",
+                options: [
+                    "Nasi, ayam goreng, kerupuk, es krim",
+                    "Nasi, sayur, lauk pauk, buah, susu",
+                    "Mie instan, sosis, nugget, minuman bersoda",
+                    "Roti, selai, mentega, susu coklat"
+                ],
+                correct: 1
+            },
+            {
+                question: "Berapa lama sebaiknya kita berolahraga setiap hari?",
+                options: [
+                    "5 menit",
+                    "30-60 menit",
+                    "2 jam",
+                    "Tidak perlu olahraga setiap hari"
+                ],
+                correct: 1
+            },
+            {
+                question: "Apa yang harus dilakukan jika ada teman yang jatuh dari sepeda?",
+                options: [
+                    "Tertawa dan meninggalkannya",
+                    "Segera mencari bantuan orang dewasa",
+                    "Mencoba mengobati sendiri",
+                    "Pura-pura tidak melihat"
+                ],
+                correct: 1
+            },
+            {
+                question: "Kapan waktu yang tepat untuk menyikat gigi?",
+                options: [
+                    "Hanya saat mandi",
+                    "Setelah makan dan sebelum tidur",
+                    "Hanya jika gigi terasa kotor",
+                    "Sekali seminggu"
+                ],
+                correct: 1
+            },
+            {
+                question: "Buah apa yang baik untuk kesehatan mata?",
+                options: [
+                    "Pisang",
+                    "Wortel (sayur)",
+                    "Jeruk",
+                    "Apel"
+                ],
+                correct: 1
+            },
+            {
+                question: "Apa yang harus dilakukan jika terjadi kebakaran?",
+                options: [
+                    "Mengambil barang berharga dulu",
+                    "Segera keluar dan cari bantuan",
+                    "Bersembunyi di dalam lemari",
+                    "Mencoba memadamkan api sendiri"
+                ],
+                correct: 1
+            },
+            {
+                question: "Berapa lama sebaiknya menyikat gigi?",
+                options: [
+                    "10 detik",
+                    "2 menit",
+                    "5 menit",
+                    "Sampai bosan"
+                ],
+                correct: 1
+            }
+        ];
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.querySelector('.nav-links');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const completionBadges = document.querySelectorAll('.completion-badge');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const materialCards = document.querySelectorAll('.material-card-sd');
+        const materialModal = document.getElementById('materialModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalDuration = document.getElementById('modalDuration');
+        const markComplete = document.getElementById('markComplete');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Toggle Dark Mode
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Load theme from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        // Mobile Menu Toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.innerHTML = this.innerHTML.includes('fa-bars') ? 
+                '<i class="fas fa-times"></i>' : 
+                '<i class="fas fa-bars"></i>';
+        });
+
+        // Progress Tracking
+        let completedMaterials = 0;
+        const totalMaterials = completionBadges.length;
+        let currentMaterialId = null;
+        
+        // Load progress from localStorage
+        function loadProgress() {
+            const savedProgress = JSON.parse(localStorage.getItem('sdProgress') || '{}');
+            completedMaterials = 0;
+            
+            completionBadges.forEach(badge => {
+                const materialId = badge.getAttribute('data-material');
+                if (savedProgress[materialId]) {
+                    badge.classList.add('completed');
+                    completedMaterials++;
+                }
+            });
+            
+            updateProgress();
+        }
+        
+        // Save progress to localStorage
+        function saveProgress() {
+            const progress = {};
+            completionBadges.forEach(badge => {
+                const materialId = badge.getAttribute('data-material');
+                progress[materialId] = badge.classList.contains('completed');
+            });
+            localStorage.setItem('sdProgress', JSON.stringify(progress));
+        }
+        
+        function updateProgress() {
+            const percentage = Math.round((completedMaterials / totalMaterials) * 100);
+            progressFill.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}% selesai`;
+            
+            // Add celebration effect when reaching 100%
+            if (percentage === 100) {
+                progressFill.style.background = 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)';
+                progressText.innerHTML = '100% selesai <i class="fas fa-trophy bounce" style="margin-left: 5px;"></i>';
+                
+                // Show confetti effect
+                showConfetti();
+            } else {
+                progressFill.style.background = 'var(--gradient)';
+            }
+        }
+        
+        // Material Card Click Handler
+        materialCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const materialId = this.getAttribute('data-material');
+                openMaterialModal(materialId);
+            });
+        });
+        
+        // Open Material Modal
+        function openMaterialModal(materialId) {
+            const material = materialsData[materialId];
+            if (!material) return;
+            
+            currentMaterialId = materialId;
+            modalTitle.textContent = material.title;
+            modalBody.innerHTML = material.content;
+            modalDuration.textContent = material.duration;
+            
+            // Update mark complete button state
+            const badge = document.querySelector(`.completion-badge[data-material="${materialId}"]`);
+            updateMarkCompleteButton(badge.classList.contains('completed'));
+            
+            materialModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Update mark complete button based on completion status
+        function updateMarkCompleteButton(isCompleted) {
+            if (isCompleted) {
+                markComplete.innerHTML = '<i class="fas fa-undo"></i> Tandai Belum Selesai';
+                markComplete.classList.remove('btn-primary');
+                markComplete.classList.add('btn-outline');
+            } else {
+                markComplete.innerHTML = '<i class="fas fa-check"></i> Tandai Selesai';
+                markComplete.classList.remove('btn-outline');
+                markComplete.classList.add('btn-primary');
+            }
+        }
+        
+        // Close Modal
+        modalClose.addEventListener('click', closeModal);
+        
+        function closeModal() {
+            materialModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Mark Complete Button - Toggle functionality
+        markComplete.addEventListener('click', function() {
+            if (!currentMaterialId) return;
+            
+            const badge = document.querySelector(`.completion-badge[data-material="${currentMaterialId}"]`);
+            const isCompleted = badge.classList.contains('completed');
+            
+            if (isCompleted) {
+                // Mark as not completed
+                badge.classList.remove('completed');
+                completedMaterials--;
+                updateMarkCompleteButton(false);
+            } else {
+                // Mark as completed
+                badge.classList.add('completed');
+                completedMaterials++;
+                updateMarkCompleteButton(true);
+                
+                // Add animation effect
+                badge.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    badge.style.transform = 'scale(1)';
+                }, 300);
+            }
+            
+            updateProgress();
+            saveProgress();
+        });
+        
+        // Close modal when clicking outside
+        materialModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Filter Materials
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filterValue = this.getAttribute('data-filter');
+                
+                materialCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+        
+        // Quiz Functionality
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let shuffledQuestions = [];
+        
+        const currentQuestionElement = document.getElementById('currentQuestion');
+        const quizScoreElement = document.getElementById('quizScore');
+        const quizQuestionElement = document.getElementById('quizQuestion');
+        const quizOptionsElement = document.getElementById('quizOptions');
+        const prevQuestionButton = document.getElementById('prevQuestion');
+        const nextQuestionButton = document.getElementById('nextQuestion');
+        const quizContent = document.getElementById('quizContent');
+        const quizResult = document.getElementById('quizResult');
+        const finalScoreElement = document.getElementById('finalScore');
+        const resultTitleElement = document.getElementById('resultTitle');
+        const resultMessageElement = document.getElementById('resultMessage');
+        const restartQuizButton = document.getElementById('restartQuiz');
+        
+        // Fungsi untuk mengacak array
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        // Acak pertanyaan dan opsi jawaban
+        function shuffleQuestions() {
+            // Acak urutan pertanyaan
+            shuffledQuestions = shuffleArray(quizQuestions).slice(0, 5);
+            
+            // Acak opsi jawaban untuk setiap pertanyaan
+            shuffledQuestions.forEach(question => {
+                const originalCorrect = question.correct;
+                const shuffledOptions = shuffleArray(question.options);
+                
+                // Cari posisi jawaban yang benar setelah diacak
+                question.correct = shuffledOptions.indexOf(question.options[originalCorrect]);
+                question.options = shuffledOptions;
+            });
+        }
+        
+        function loadQuestion() {
+            const currentQuestion = shuffledQuestions[currentQuestionIndex];
+            
+            currentQuestionElement.textContent = currentQuestionIndex + 1;
+            quizQuestionElement.textContent = currentQuestion.question;
+            
+            // Clear previous options
+            quizOptionsElement.innerHTML = '';
+            
+            // Add new options
+            currentQuestion.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('quiz-option');
+                optionElement.textContent = option;
+                optionElement.setAttribute('data-index', index);
+                
+                // Check if user has already answered this question
+                if (userAnswers[currentQuestionIndex] !== undefined) {
+                    if (userAnswers[currentQuestionIndex] === index) {
+                        optionElement.classList.add('selected');
+                    }
+                    
+                    // Show correct/incorrect feedback
+                    if (index === currentQuestion.correct) {
+                        optionElement.style.borderColor = 'var(--secondary)';
+                        optionElement.style.backgroundColor = 'rgba(39, 174, 96, 0.1)';
+                    } else if (userAnswers[currentQuestionIndex] === index && index !== currentQuestion.correct) {
+                        optionElement.style.borderColor = 'var(--error)';
+                        optionElement.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+                    }
+                }
+                
+                optionElement.addEventListener('click', () => selectOption(index));
+                quizOptionsElement.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevQuestionButton.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === shuffledQuestions.length - 1) {
+                nextQuestionButton.textContent = 'Selesai';
+            } else {
+                nextQuestionButton.textContent = 'Selanjutnya';
+            }
+        }
+        
+        function selectOption(optionIndex) {
+            // If already answered, don't allow changing
+            if (userAnswers[currentQuestionIndex] !== undefined) return;
+            
+            // Mark the selected option
+            const options = quizOptionsElement.querySelectorAll('.quiz-option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            
+            // Store the answer
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Check if correct
+            if (optionIndex === shuffledQuestions[currentQuestionIndex].correct) {
+                score++;
+                quizScoreElement.textContent = `Skor: ${score}`;
+            }
+            
+            // Show feedback
+            options.forEach((option, index) => {
+                if (index === shuffledQuestions[currentQuestionIndex].correct) {
+                    option.style.borderColor = 'var(--secondary)';
+                    option.style.backgroundColor = 'rgba(39, 174, 96, 0.1)';
+                } else if (index === optionIndex && index !== shuffledQuestions[currentQuestionIndex].correct) {
+                    option.style.borderColor = 'var(--error)';
+                    option.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+                }
+            });
+        }
+        
+        function showResults() {
+            quizContent.style.display = 'none';
+            quizResult.classList.add('active');
+            
+            finalScoreElement.textContent = `${score}/${shuffledQuestions.length}`;
+            
+            if (score === shuffledQuestions.length) {
+                resultTitleElement.textContent = 'Luar Biasa!';
+                resultMessageElement.textContent = 'Kamu benar-benar memahami materi kesehatan dengan baik. Pertahankan ya!';
+                showConfetti();
+            } else if (score >= shuffledQuestions.length * 0.7) {
+                resultTitleElement.textContent = 'Bagus Sekali!';
+                resultMessageElement.textContent = 'Pengetahuan kesehatanmu sudah cukup baik. Terus belajar ya!';
+            } else if (score >= shuffledQuestions.length * 0.5) {
+                resultTitleElement.textContent = 'Cukup Baik';
+                resultMessageElement.textContent = 'Pengetahuan kesehatanmu sudah cukup, tapi masih perlu belajar lagi.';
+            } else {
+                resultTitleElement.textContent = 'Perlu Belajar Lagi';
+                resultMessageElement.textContent = 'Jangan menyerah! Pelajari lagi materi kesehatan dan coba kuis sekali lagi.';
+            }
+        }
+        
+        // Event listeners for quiz navigation
+        prevQuestionButton.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+        
+        nextQuestionButton.addEventListener('click', () => {
+            if (userAnswers[currentQuestionIndex] === undefined) {
+                alert('Pilih jawaban terlebih dahulu!');
+                return;
+            }
+            
+            if (currentQuestionIndex < shuffledQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+        
+        restartQuizButton.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            quizScoreElement.textContent = 'Skor: 0';
+            quizContent.style.display = 'block';
+            quizResult.classList.remove('active');
+            shuffleQuestions();
+            loadQuestion();
+        });
+        
+        // Initialize quiz
+        shuffleQuestions();
+        loadQuestion();
+        
+        // Confetti effect
+        function showConfetti() {
+            const confettiCount = 100;
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'fixed';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '9999';
+            document.body.appendChild(confettiContainer);
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                confettiContainer.appendChild(confetti);
+                
+                // Add falling animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fall {
+                        0% {
+                            transform: translateY(-100px) rotate(0deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateY(100vh) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Remove confetti after animation
+            setTimeout(() => {
+                document.body.removeChild(confettiContainer);
+            }, 5000);
+        }
+        
+        function getRandomColor() {
+            const colors = ['#3498DB', '#27AE60', '#E67E22', '#9B59B6', '#F39C12', '#1ABC9C'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load progress from localStorage
+            loadProgress();
+            loadTheme();
+            
+            // Add animation to elements on scroll
+            const animatedElements = document.querySelectorAll('.material-card-sd, .section-title, .section-subtitle');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

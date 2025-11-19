@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistenku - Informasi & Bantuan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIABLES & RESET ===== */
+        :root {
+            --primary: #3498DB;
+            --primary-dark: #2980B9;
+            --secondary: #27AE60;
+            --secondary-dark: #219653;
+            --accent: #E67E22;
+            --warning: #F39C12;
+            --error: #E74C3C;
+            --light-bg: #E8F4F8;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --gray: #6C757D;
+            --dark: #2C3E50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            
+            /* Dark mode variables - default values */
+            --bg-color: #E8F4F8;
+            --text-color: #2C3E50;
+            --card-bg: #FFFFFF;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --footer-bg: #2C3E50;
+            --footer-text: #FFFFFF;
+            --input-bg: #FFFFFF;
+            --input-border: #E5E7EB;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --card-bg: #16213e;
+            --header-bg: rgba(26, 26, 46, 0.95);
+            --footer-bg: #0f1419;
+            --footer-text: #e6e6e6;
+            --input-bg: #16213e;
+            --input-border: #2a3a5a;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --light-bg: #1a1a2e;
+            --light-gray: #16213e;
+            --gray: #a0a0a0;
+            --dark: #e6e6e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px var(--shadow-color);
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--gray);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* ===== HEADER & NAVIGATION ===== */
+        header {
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(15deg);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* Nav Controls */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1100;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-color);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px 30px;
+            transition: right 0.4s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .nav-links.active {
+            right: 0;
+        }
+
+        .nav-links li {
+            margin-bottom: 15px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .theme-toggle input {
+            display: none;
+        }
+
+        .toggle-slider {
+            width: 50px;
+            height: 24px;
+            background-color: var(--gray);
+            border-radius: 34px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
+        .toggle-icons i {
+            font-size: 1rem;
+        }
+
+        /* ===== CONTENT STYLES ===== */
+        .content-section {
+            padding-top: 150px;
+            min-height: 100vh;
+        }
+
+        .content-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .content-nav a {
+            padding: 12px 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .content-nav a:hover,
+        .content-nav a.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .content-card {
+            margin-bottom: 30px;
+        }
+
+        .content-card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .content-card h3 {
+            color: var(--secondary);
+            margin: 25px 0 15px;
+        }
+
+        .content-card p {
+            margin-bottom: 15px;
+        }
+
+        .content-card ul, .content-card ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-card li {
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .contact-form {
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: var(--light-bg);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--footer-text);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #BDC3C7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #BDC3C7;
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .content-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .content-nav a {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section {
+                padding: 80px 0;
+            }
+            
+            .content-section {
+                padding-top: 130px;
+            }
+            
+            .toggle-icons {
+                display: none;
+            }
+            
+            .nav-links {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="halamanutama.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="logo-text">Asistenku</div>
+                </a>
+                
+                <div class="nav-controls">
+                    <div class="theme-toggle">
+                        <input type="checkbox" id="themeToggle">
+                        <label for="themeToggle" class="toggle-slider"></label>
+                        <div class="toggle-icons">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="hamburger-menu" id="hamburgerMenu">
+                        <div class="hamburger-line"></div>
+                        <div class="hamburger-line"></div>
+                        <div class="hamburger-line"></div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Navigation Overlay -->
+        <div class="nav-overlay" id="navOverlay"></div>
+        
+        <!-- Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+            <li><a href="halamanutama.html">Beranda</a></li>
+            <li><a href="halamanutama.html#education">Pembelajaran</a></li>
+            <li><a href="halamanutama.html#healthcare">Layanan Kesehatan</a></li>
+            <li><a href="halamanutama.html#calculators">Kalkulator</a></li>
+            <li><a href="halamanutama.html#child-dev">Perkembangan Anak</a></li>
+            <li><a href="halamanutama.html#emergency">Darurat</a></li>
+            <li><a href="info.html" class="active">Informasi</a></li>
+        </ul>
+    </header>
+
+    <!-- Content Section -->
+    <section class="section content-section">
+        <div class="container">
+            <h1 class="section-title">Informasi & Bantuan</h1>
+            
+            <div class="content-nav">
+                <a href="#faq" class="active">FAQ</a>
+                <a href="#privacy">Kebijakan Privasi</a>
+                <a href="#terms">Syarat & Ketentuan</a>
+                <a href="#contact">Hubungi Kami</a>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div id="faq" class="content-card card fade-in-up">
+                <h2>Pertanyaan yang Sering Diajukan (FAQ)</h2>
+                
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        Apa itu Asistenku?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Asistenku adalah platform kesehatan digital yang menyediakan edukasi kesehatan, konsultasi AI, akses ke layanan kesehatan terdekat, dan berbagai alat kesehatan untuk masyarakat Indonesia.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Bagaimana cara menggunakan i-Doc AI Assistant?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Klik ikon chatbot di sudut kanan bawah layar, lalu ketik pertanyaan atau gejala yang Anda alami. i-Doc akan memberikan informasi dan saran kesehatan berdasarkan input Anda.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Apakah layanan ini menggantikan konsultasi dokter?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tidak. Asistenku adalah alat bantu informasi kesehatan dan tidak dimaksudkan untuk menggantikan diagnosis atau perawatan medis profesional. Selalu konsultasikan dengan tenaga medis untuk masalah kesehatan serius.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Bagaimana cara menemukan fasilitas kesehatan terdekat?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Pergi ke bagian "Temukan Layanan Kesehatan" dan gunakan filter untuk mencari rumah sakit, klinik, atau apotek terdekat berdasarkan lokasi dan jenis layanan yang Anda butuhkan.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Apakah data kesehatan saya aman?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ya, kami sangat serius dengan privasi dan keamanan data Anda. Semua informasi pribadi dan kesehatan dilindungi dengan enkripsi dan tidak dibagikan kepada pihak ketiga tanpa izin Anda.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Apakah layanan ini gratis?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ya, sebagian besar layanan dasar Asistenku tersedia secara gratis. Namun, beberapa fitur premium mungkin dikenakan biaya di masa depan.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Privacy Policy Section -->
+            <div id="privacy" class="content-card card fade-in-up">
+                <h2>Kebijakan Privasi</h2>
+                
+                <p>Terakhir diperbarui: 1 Desember 2023</p>
+                
+                <h3>1. Informasi yang Kami Kumpulkan</h3>
+                <p>Kami mengumpulkan informasi berikut untuk memberikan layanan yang lebih baik:</p>
+                <ul>
+                    <li>Informasi pribadi (nama, email, usia, jenis kelamin) yang Anda berikan saat mendaftar</li>
+                    <li>Data kesehatan yang Anda input ke dalam kalkulator kesehatan</li>
+                    <li>Riwayat konsultasi dengan i-Doc AI Assistant</li>
+                    <li>Informasi penggunaan website melalui cookies</li>
+                </ul>
+                
+                <h3>2. Penggunaan Informasi</h3>
+                <p>Informasi yang kami kumpulkan digunakan untuk:</p>
+                <ul>
+                    <li>Menyediakan layanan kesehatan personalisasi</li>
+                    <li>Meningkatkan kualitas platform dan pengalaman pengguna</li>
+                    <li>Mengirimkan pembaruan dan informasi kesehatan yang relevan</li>
+                    <li>Analisis data untuk penelitian kesehatan (dianonimkan)</li>
+                </ul>
+                
+                <h3>3. Perlindungan Data</h3>
+                <p>Kami menerapkan langkah-langkah keamanan teknis dan organisasi yang sesuai untuk melindungi informasi pribadi Anda dari akses, penggunaan, atau pengungkapan yang tidak sah.</p>
+                
+                <h3>4. Berbagi Informasi</h3>
+                <p>Kami tidak menjual, memperdagangkan, atau mentransfer informasi pribadi Anda kepada pihak ketiga, kecuali:</p>
+                <ul>
+                    <li>Dengan persetujuan eksplisit Anda</li>
+                    <li>Untuk mematuhi hukum atau proses hukum</li>
+                    <li>Untuk melindungi hak, properti, atau keselamatan kami, pengguna kami, atau orang lain</li>
+                </ul>
+                
+                <h3>5. Hak Anda</h3>
+                <p>Anda memiliki hak untuk:</p>
+                <ul>
+                    <li>Mengakses informasi pribadi yang kami simpan tentang Anda</li>
+                    <li>Memperbaiki informasi yang tidak akurat</li>
+                    <li>Menghapus informasi pribadi Anda</li>
+                    <li>Menolak pemrosesan data tertentu</li>
+                </ul>
+                
+                <h3>6. Kontak</h3>
+                <p>Jika Anda memiliki pertanyaan tentang Kebijakan Privasi ini, silakan hubungi kami melalui halaman <a href="#contact">Hubungi Kami</a>.</p>
+            </div>
+            
+            <!-- Terms & Conditions Section -->
+            <div id="terms" class="content-card card fade-in-up">
+                <h2>Syarat & Ketentuan</h2>
+                
+                <p>Dengan mengakses dan menggunakan platform Asistenku, Anda setuju untuk terikat oleh syarat dan ketentuan berikut:</p>
+                
+                <h3>1. Penggunaan Layanan</h3>
+                <p>Anda setuju untuk menggunakan Asistenku hanya untuk tujuan yang sah dan sesuai dengan semua hukum dan regulasi yang berlaku.</p>
+                
+                <h3>2. Batasan Tanggung Jawab</h3>
+                <p>Asistenku menyediakan informasi kesehatan umum dan tidak memberikan saran medis, diagnosis, atau perawatan. Informasi yang diberikan tidak dimaksudkan untuk menggantikan konsultasi dengan profesional kesehatan yang berkualifikasi.</p>
+                
+                <h3>3. Akun Pengguna</h3>
+                <p>Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun dan kata sandi Anda, serta untuk semua aktivitas yang terjadi di bawah akun Anda.</p>
+                
+                <h3>4. Konten Pengguna</h3>
+                <p>Dengan mengirimkan konten ke platform, Anda memberikan kami lisensi non-eksklusif untuk menggunakan, menampilkan, dan mendistribusikan konten tersebut dalam hubungannya dengan layanan kami.</p>
+                
+                <h3>5. Hak Kekayaan Intelektual</h3>
+                <p>Semua hak kekayaan intelektual dalam platform dan kontennya adalah milik Asistenku atau pemberi lisensinya. Anda tidak boleh menggunakan merek dagang, logo, atau konten kami tanpa izin tertulis.</p>
+                
+                <h3>6. Penghentian Layanan</h3>
+                <p>Kami berhak untuk menghentikan atau menangguhkan akses Anda ke layanan kami kapan saja, tanpa pemberitahuan, karena pelanggaran terhadap Syarat & Ketentuan ini.</p>
+                
+                <h3>7. Perubahan pada Syarat & Ketentuan</h3>
+                <p>Kami dapat merevisi Syarat & Ketentuan ini dari waktu ke waktu. Perubahan akan efektif segera setelah diposting di platform.</p>
+                
+                <h3>8. Hukum yang Berlaku</h3>
+                <p>Syarat & Ketentuan ini diatur oleh dan ditafsirkan sesuai dengan hukum Republik Indonesia.</p>
+            </div>
+            
+            <!-- Contact Section -->
+            <div id="contact" class="content-card card fade-in-up">
+                <h2>Hubungi Kami</h2>
+                
+                <p>Kami senang mendengar dari Anda. Silakan hubungi kami melalui salah satu cara berikut:</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3>Email</h3>
+                            <p>asistenku01@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h3>Telepon</h3>
+                            <p>087885044117</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3>Alamat</h3>
+                            <p>Jl. Sahadewa, Mengwi, Badung, Bali</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3>Jam Operasional</h3>
+                            <p>Siap Beroprasi 24 Jam</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Kirim Pesan</h3>
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Nama Lengkap</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subjek</label>
+                            <select id="subject" required>
+                                <option value="">Pilih subjek</option>
+                                <option value="general">Pertanyaan Umum</option>
+                                <option value="technical">Masalah Teknis</option>
+                                <option value="privacy">Pertanyaan Privasi</option>
+                                <option value="partnership">Kemitraan</option>
+                                <option value="other">Lainnya</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Pesan</label>
+                            <textarea id="message" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Asistenku</h3>
+                    <p>Platform kesehatan digital terpercaya untuk masyarakat Indonesia. Menyediakan edukasi kesehatan, konsultasi AI, dan akses ke layanan kesehatan.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Layanan</h3>
+                    <ul class="footer-links">
+                        <li><a href="halamanutama.html#education">Edukasi Kesehatan</a></li>
+                        <li><a href="halamanutama.html#healthcare">Temukan Layanan Kesehatan</a></li>
+                        <li><a href="halamanutama.html#calculators">Kalkulator Kesehatan</a></li>
+                        <li><a href="halamanutama.html#child-dev">Perkembangan Anak</a></li>
+                        <li><a href="halamanutama.html#emergency">Darurat Medis</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Perusahaan</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Tentang Kami</a></li>
+                        <li><a href="#">Tim Kami</a></li>
+                        <li><a href="#">Karir</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Bantuan</h3>
+                    <ul class="footer-links">
+                        <li><a href="info.html#faq">FAQ</a></li>
+                        <li><a href="info.html#privacy">Kebijakan Privasi</a></li>
+                        <li><a href="info.html#terms">Syarat & Ketentuan</a></li>
+                        <li><a href="info.html#contact">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Asistenku. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ========== FUNGSI UTAMA ==========
+        
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        function setupDarkMode() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.checked = true;
+            }
+        }
+
+        function toggleDarkMode() {
+            if (themeToggle.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Navigation Mobile
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const navLinks = document.getElementById('navLinks');
+        const navOverlay = document.getElementById('navOverlay');
+
+        function toggleMobileMenu() {
+            hamburgerMenu.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            hamburgerMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+            navOverlay.classList.remove('active');
+        }
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+
+        // Content Navigation
+        const contentNavLinks = document.querySelectorAll('.content-nav a');
+
+        contentNavLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                contentNavLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Scroll to target section
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    const headerHeight = document.getElementById('header').offsetHeight;
+                    const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Contact Form
+        const contactForm = document.getElementById('contactForm');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // In a real application, you would send this data to a server
+            // For now, we'll just show an alert
+            alert(`Terima kasih ${name}! Pesan Anda telah berhasil dikirim. Kami akan membalas ke ${email} dalam waktu 1-2 hari kerja.`);
+            
+            // Reset form
+            contactForm.reset();
+        });
+
+        // Update active nav based on scroll position
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('.content-card');
+            const headerHeight = document.getElementById('header').offsetHeight;
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerHeight - 100;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    currentSection = '#' + section.getAttribute('id');
+                }
+            });
+            
+            contentNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // ========== EVENT LISTENERS ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDarkMode();
+            
+            // Navigation
+            hamburgerMenu.addEventListener('click', toggleMobileMenu);
+            navOverlay.addEventListener('click', closeMobileMenu);
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            // Dark Mode
+            themeToggle.addEventListener('change', toggleDarkMode);
+
+            // Scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = "1";
+                        entry.target.style.transform = "translateY(0)";
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = "0";
+                card.style.transform = "translateY(20px)";
+                card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+                observer.observe(card);
+            });
+
+            // Update active nav on scroll
+            window.addEventListener('scroll', updateActiveNav);
+        });
+    </script>
+</body>
+</html>
