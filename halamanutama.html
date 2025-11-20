@@ -765,7 +765,7 @@
         .hero-image {
             width: 100%;
             height: auto;
-            max-width: 500px;
+            max-width: 700px;
             object-fit: contain;
             border: none;
             box-shadow: none;
@@ -1145,6 +1145,159 @@
             font-size: 1.1rem;
         }
 
+        /* ===== NEWS SECTION ===== */
+        .news {
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--light-bg) 100%);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .news-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .news-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .news-card:hover .news-image img {
+            transform: scale(1.05);
+        }
+
+        .news-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+        }
+
+        .news-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .news-excerpt {
+            color: var(--gray);
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .news-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .news-footer {
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 30px;
+        }
+
+        .news-update-time {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .news-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+            grid-column: 1 / -1;
+        }
+
+        .news-loading i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .api-status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: var(--radius);
+            font-weight: 500;
+        }
+
+        .status-live {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-error {
+            background: #fecaca;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
+        .news-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .news-controls .btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .news-controls .btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .fallback-image {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
         /* ===== EMERGENCY SECTION ===== */
         .emergency {
             background: linear-gradient(135deg, var(--light-gray) 0%, var(--light-bg) 100%);
@@ -1351,6 +1504,10 @@
             .hero-buttons {
                 justify-content: center;
             }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1380,6 +1537,11 @@
             
             .search-box input {
                 width: 100%;
+            }
+            
+            .news-controls {
+                flex-direction: column;
+                align-items: center;
             }
         }
 
@@ -1411,6 +1573,11 @@
             
             .dev-calculator {
                 padding: 20px;
+            }
+            
+            .news-controls .btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -1464,6 +1631,7 @@
             <li><a href="#education">Pembelajaran</a></li>
             <li><a href="#healthcare">Layanan Kesehatan</a></li>
             <li><a href="#calculators">Kalkulator</a></li>
+            <li><a href="#news">Berita Kesehatan</a></li>
             <li><a href="#child-dev">Perkembangan Anak</a></li>
             <li><a href="#emergency">Darurat</a></li>
         </ul>
@@ -1742,6 +1910,42 @@
         </div>
     </section>
 
+    <!-- News Section -->
+    <section id="news" class="section news">
+        <div class="container">
+            <h2 class="section-title">Berita Kesehatan Terkini</h2>
+            <p class="section-subtitle">Update real-time dari berbagai sumber terpercaya</p>
+            
+            <div id="apiStatus" class="api-status">
+                <i class="fas fa-sync fa-spin"></i> Memeriksa koneksi API...
+            </div>
+
+            <div class="news-controls">
+                <button class="btn active" onclick="filterNews('all')">Semua</button>
+                <button class="btn btn-outline" onclick="filterNews('health')">Kesehatan</button>
+                <button class="btn btn-outline" onclick="filterNews('medicine')">Medis</button>
+                <button class="btn btn-outline" onclick="filterNews('hospital')">Rumah Sakit</button>
+            </div>
+
+            <div class="news-grid" id="newsContainer">
+                <div class="news-loading">
+                    <i class="fas fa-sync fa-spin"></i>
+                    <p>Memuat berita terbaru...</p>
+                </div>
+            </div>
+
+            <div class="news-footer">
+                <p class="news-update-time">
+                    <i class="fas fa-clock"></i>
+                    Terupdate: <span id="lastUpdateTime">-</span>
+                </p>
+                <div class="api-info">
+                    <small>Data dari: <span id="apiSource">NewsAPI.org</span></small>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Child Development Section -->
     <section id="child-dev" class="section child-development">
         <div class="container">
@@ -1888,6 +2092,7 @@
                         <li><a href="#education">Edukasi Kesehatan</a></li>
                         <li><a href="#healthcare">Temukan Layanan Kesehatan</a></li>
                         <li><a href="#calculators">Kalkulator Kesehatan</a></li>
+                        <li><a href="#news">Berita Kesehatan</a></li>
                         <li><a href="#child-dev">Perkembangan Anak</a></li>
                         <li><a href="#emergency">Darurat Medis</a></li>
                     </ul>
@@ -2234,10 +2439,6 @@
                             <label for="age">Usia (tahun)</label>
                             <input type="number" id="age" placeholder="Masukkan usia" min="1" max="120">
                         </div>
-                        <div class="form-group">
-                            <label for="restingHeartRate">Denyut Jantung Istirahat (bpm)</label>
-                            <input type="number" id="restingHeartRate" placeholder="Masukkan denyut jantung istirahat" min="30" max="120">
-                        </div>
                     `;
                     break;
                 case 'calorie':
@@ -2365,12 +2566,11 @@
                     
                 case 'heart':
                     const age = parseInt(document.getElementById('age').value);
-                    const restingHeartRate = parseInt(document.getElementById('restingHeartRate').value);
                     
-                    if (age && restingHeartRate) {
+                    if (age) {
                         const maxHeartRate = 220 - age;
-                        const targetHeartRateMin = Math.round((maxHeartRate - restingHeartRate) * 0.5 + restingHeartRate);
-                        const targetHeartRateMax = Math.round((maxHeartRate - restingHeartRate) * 0.85 + restingHeartRate);
+                        const targetHeartRateMin = Math.round(maxHeartRate * 0.5);
+                        const targetHeartRateMax = Math.round(maxHeartRate * 0.85);
                         
                         resultHTML = `
                             <h4>Hasil Perhitungan Denyut Jantung:</h4>
@@ -2379,7 +2579,7 @@
                             <p style="margin-top: 15px;">Zona latihan target adalah rentang denyut jantung yang ideal untuk latihan kardio.</p>
                         `;
                     } else {
-                        resultHTML = '<p style="color: var(--error);">Harap masukkan usia dan denyut jantung istirahat yang valid.</p>';
+                        resultHTML = '<p style="color: var(--error);">Harap masukkan usia yang valid.</p>';
                     }
                     break;
                     
@@ -2466,6 +2666,207 @@
             
             calculatorResult.innerHTML = resultHTML;
             calculatorResult.classList.add('active');
+        }
+
+        // ========== FUNGSI BERITA KESEHATAN ==========
+        // Konfigurasi API
+        const API_KEY = '52ce2cff82324ded9348f27bb0496e6f';
+        const API_URL = 'https://newsapi.org/v2/everything';
+        
+        let allNews = [];
+        let currentNewsFilter = 'all';
+
+        // Keyword untuk berita kesehatan
+        const healthKeywords = [
+            'kesehatan', 'health', 'medis', 'medical', 'rumah sakit', 'hospital',
+            'dokter', 'doctor', 'penyakit', 'disease', 'obat', 'medicine',
+            'vaksin', 'vaccine', 'pandemi', 'pandemic', 'virus', 'covid',
+            'diabetes', 'jantung', 'heart', 'kanker', 'cancer', 'gizi', 'nutrition'
+        ];
+
+        // Fungsi utama untuk mengambil berita
+        async function fetchHealthNews() {
+            const statusElement = document.getElementById('apiStatus');
+            
+            try {
+                statusElement.innerHTML = '<i class="fas fa-sync fa-spin"></i> Mengambil berita terbaru...';
+                statusElement.className = 'api-status status-live';
+
+                // Coba ambil berita kesehatan dalam bahasa Indonesia
+                const query = healthKeywords.slice(0, 3).join(' OR ');
+                const url = `${API_URL}?q=${encodeURIComponent(query)}&language=id&sortBy=publishedAt&pageSize=20&apiKey=${API_KEY}`;
+                
+                console.log('Fetching from:', url);
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'ok' && data.articles && data.articles.length > 0) {
+                    allNews = data.articles;
+                    displayNews(allNews);
+                    statusElement.innerHTML = `<i class="fas fa-check-circle"></i> Berhasil memuat ${data.articles.length} berita`;
+                    updateLastUpdateTime();
+                } else {
+                    throw new Error('Tidak ada berita ditemukan');
+                }
+                
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                statusElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Gagal mengambil berita: ${error.message}. Menggunakan data contoh...`;
+                statusElement.className = 'api-status status-error';
+                
+                // Fallback ke data contoh
+                loadFallbackNews();
+            }
+        }
+
+        // Fungsi untuk menampilkan berita
+        function displayNews(newsArray) {
+            const newsContainer = document.getElementById('newsContainer');
+            
+            if (!newsArray || newsArray.length === 0) {
+                newsContainer.innerHTML = `
+                    <div class="news-loading">
+                        <i class="fas fa-newspaper"></i>
+                        <p>Tidak ada berita ditemukan</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            newsContainer.innerHTML = newsArray.map((article, index) => `
+                <div class="card news-card" data-index="${index}">
+                    <div class="news-image">
+                        ${article.urlToImage ? 
+                            `<img src="${article.urlToImage}" alt="${article.title}" loading="lazy" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\"fallback-image\"><i class=\"fas fa-newspaper\"></i></div>'">` :
+                            `<div class="fallback-image"><i class="fas fa-newspaper"></i></div>`
+                        }
+                        <div class="news-category">
+                            ${getArticleCategory(article)}
+                        </div>
+                    </div>
+                    <div class="news-content">
+                        <h3>${article.title || 'Judul tidak tersedia'}</h3>
+                        <p class="news-excerpt">${truncateText(article.description || 'Deskripsi tidak tersedia', 120)}</p>
+                        <div class="news-meta">
+                            <span><i class="far fa-calendar"></i> ${formatDate(article.publishedAt)}</span>
+                            <span><i class="far fa-newspaper"></i> ${article.source?.name || 'Sumber tidak diketahui'}</span>
+                        </div>
+                        <a href="${article.url}" target="_blank" class="btn btn-outline">Baca Selengkapnya</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fungsi filter berita
+        function filterNews(category) {
+            currentNewsFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.news-controls .btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('btn-outline');
+            });
+            event.target.classList.add('active');
+            event.target.classList.remove('btn-outline');
+            
+            if (category === 'all') {
+                displayNews(allNews);
+                return;
+            }
+            
+            const filteredNews = allNews.filter(article => {
+                const content = `${article.title} ${article.description}`.toLowerCase();
+                
+                switch(category) {
+                    case 'health':
+                        return content.includes('kesehatan') || content.includes('health');
+                    case 'medicine':
+                        return content.includes('obat') || content.includes('medicine') || content.includes('medis');
+                    case 'hospital':
+                        return content.includes('rumah sakit') || content.includes('hospital');
+                    default:
+                        return true;
+                }
+            });
+            
+            displayNews(filteredNews);
+        }
+
+        // Fungsi bantu
+        function truncateText(text, maxLength) {
+            if (text.length <= maxLength) return text;
+            return text.substr(0, maxLength) + '...';
+        }
+
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            } catch (error) {
+                return 'Tanggal tidak valid';
+            }
+        }
+
+        function getArticleCategory(article) {
+            const content = `${article.title} ${article.description}`.toLowerCase();
+            
+            if (content.includes('rumah sakit') || content.includes('hospital')) {
+                return 'Rumah Sakit';
+            } else if (content.includes('obat') || content.includes('medicine')) {
+                return 'Medis';
+            } else {
+                return 'Kesehatan';
+            }
+        }
+
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdateTime').textContent = 
+                now.toLocaleTimeString('id-ID') + ' WIB';
+        }
+
+        // Data fallback jika API gagal
+        function loadFallbackNews() {
+            const fallbackNews = [
+                {
+                    title: "Program Vaksinasi Nasional Capai Target 70%",
+                    description: "Kementerian Kesehatan mengumumkan keberhasilan program vaksinasi nasional yang telah mencapai 70% populasi target.",
+                    urlToImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    publishedAt: new Date().toISOString(),
+                    source: { name: "Kemenkes RI" },
+                    url: "#"
+                },
+                {
+                    title: "Penemuan Baru Obat Diabetes Tipe 2",
+                    description: "Peneliti Indonesia berhasil mengembangkan formula obat diabetes tipe 2 yang lebih efektif dengan efek samping minimal.",
+                    urlToImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    publishedAt: new Date().toISOString(),
+                    source: { name: "Kompas Health" },
+                    url: "#"
+                },
+                {
+                    title: "Waspada DBD: Kasus Meningkat 30% di Musim Hujan",
+                    description: "Kemenkes mengimbau masyarakat waspada terhadap peningkatan kasus DBD yang naik 30% selama musim hujan.",
+                    urlToImage: "https://images.unsplash.com/photo-1584467735871-8db9ac8d0eaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    publishedAt: new Date().toISOString(),
+                    source: { name: "Kemenkes RI" },
+                    url: "#"
+                }
+            ];
+            
+            allNews = fallbackNews;
+            displayNews(fallbackNews);
+            updateLastUpdateTime();
         }
 
         // ========== FUNGSI PERKEMBANGAN ANAK ==========
@@ -2838,6 +3239,12 @@
 
             // Healthcare Finder
             document.getElementById('applyFilters').addEventListener('click', applyHealthcareFilters);
+
+            // Berita Kesehatan
+            fetchHealthNews();
+            
+            // Auto-refresh berita setiap 5 menit
+            setInterval(fetchHealthNews, 300000);
         });
     </script>
 
